@@ -45,7 +45,7 @@ public class Problem1 extends Problem {
 
     public Pair<int[], Long> countSplitAndMerge(int[] left, int[] right) {
         int leftLen = left.length, rightLen = right.length;
-        int res[] = new int[leftLen + rightLen];
+        int sortedOutput[] = new int[leftLen + rightLen];
 
         int leftIndex = 0, rightIndex = 0, resIndex = 0;
 
@@ -53,12 +53,12 @@ public class Problem1 extends Problem {
 
         while (leftIndex < leftLen && rightIndex < rightLen) {
             if (left[leftIndex] <= right[rightIndex]) {
-                res[resIndex] = left[leftIndex];
+                sortedOutput[resIndex] = left[leftIndex];
                 leftIndex++;
                 resIndex++;
                 // nothing
             } else {
-                res[resIndex] = right[rightIndex];
+                sortedOutput[resIndex] = right[rightIndex];
                 rightIndex++;
                 resIndex++;
 
@@ -68,18 +68,18 @@ public class Problem1 extends Problem {
         }
 
         while (leftIndex < leftLen) {
-            res[resIndex] = left[leftIndex];
+            sortedOutput[resIndex] = left[leftIndex];
             leftIndex++;
             resIndex++;
         }
 
         while (rightIndex < rightLen) {
-            res[resIndex] = right[rightIndex];
+            sortedOutput[resIndex] = right[rightIndex];
             rightIndex++;
             resIndex++;
         }
 
-        return Pair.of(res, inversions);
+        return Pair.of(sortedOutput, inversions);
     }
 
     private int[] readInput() {
