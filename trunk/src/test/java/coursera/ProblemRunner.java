@@ -1,9 +1,9 @@
-package codeforces;
+package coursera;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+
+import notsandbox.Problem;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -12,25 +12,19 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Assert;
 
-public class TestComparer {
+public class ProblemRunner {
 
-    private final Runnable sut;
+    private final Problem sut;
     private StringBuilderWriter out;
 
-    public TestComparer(Runnable sut) {
+    public ProblemRunner(Problem sut) {
         this.sut = sut;
         this.out = new StringBuilderWriter();
         setOutput();
     }
 
     private void setOutput() {
-        try {
-            Field field = sut.getClass().getDeclaredField("out");
-            field.setAccessible(true);
-            field.set(sut, printWriter());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        sut.setOut(printWriter());
     }
 
     private PrintWriter printWriter() {
@@ -64,12 +58,7 @@ public class TestComparer {
     }
 
     private void setInput(InputStream input) {
-        try {
-            Method method = sut.getClass().getDeclaredMethod("setInput", InputStream.class);
-            method.invoke(sut, input);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        sut.setInput(input);
     }
 
     public void verifyFromFile(String name) {
@@ -96,4 +85,7 @@ public class TestComparer {
         Assert.assertArrayEquals(output.split("\\s+"), actual.split("\\s+"));
     }
 
+    public String getOutput() {
+        return out.toString();
+    }
 }

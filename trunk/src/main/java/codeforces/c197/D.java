@@ -22,9 +22,9 @@ public class D implements Runnable {
 
             readLab();
 
-            String result = calc(labs, start);
+            String res = calc(labs, start);
 
-            out.print(result);
+            out.print(res);
             out.flush();
         } catch (Exception e) {
             throw new RuntimeException(e);
