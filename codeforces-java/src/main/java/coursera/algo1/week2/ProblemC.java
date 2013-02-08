@@ -32,7 +32,7 @@ public class ProblemC extends ProblemA {
         int beg = input[left];
         int end = input[right - 1];
 
-        int medIndex = (right - left) / 2;
+        int medIndex = left + (right - left) / 2;
         if ((right - left) % 2 == 0) {
             medIndex = medIndex - 1;
         }

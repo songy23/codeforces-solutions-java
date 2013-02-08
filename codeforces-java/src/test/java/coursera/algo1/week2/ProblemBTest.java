@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 public class ProblemBTest {
+
     @Test
     public void sortIsCorrect() {
         ProblemA sut = new ProblemB();
