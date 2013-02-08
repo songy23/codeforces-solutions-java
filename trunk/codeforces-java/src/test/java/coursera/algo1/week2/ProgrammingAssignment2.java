@@ -4,7 +4,10 @@ import org.testng.annotations.Test;
 
 import coursera.ProblemRunner;
 
+import static org.testng.Assert.*;
+
 public class ProgrammingAssignment2 {
+
     @Test
     public void problemA() {
         ProblemRunner test = new ProblemRunner(new ProblemA());
@@ -12,7 +15,9 @@ public class ProgrammingAssignment2 {
         test.inputFromFile("QuickSort.txt");
         test.run();
 
-        System.out.println(test.getOutput());
+        String output = test.getOutput().trim();
+        System.out.println(output);
+        assertEquals(output, "162085");
     }
 
     @Test
@@ -22,7 +27,9 @@ public class ProgrammingAssignment2 {
         test.inputFromFile("QuickSort.txt");
         test.run();
 
-        System.out.println(test.getOutput());
+        String output = test.getOutput().trim();
+        System.out.println(output);
+        assertEquals(output, "164123");
     }
 
     @Test
@@ -32,6 +39,8 @@ public class ProgrammingAssignment2 {
         test.inputFromFile("QuickSort.txt");
         test.run();
 
-        System.out.println(test.getOutput());
+        String output = test.getOutput().trim();
+        System.out.println(output);
+        assertEquals(output, "138382");
     }
 }
