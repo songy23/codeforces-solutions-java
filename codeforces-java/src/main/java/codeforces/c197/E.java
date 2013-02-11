@@ -8,7 +8,7 @@ public class E implements Runnable {
     private static final int NO_PARENT = -1;
     private PrintWriter out = new PrintWriter(System.out, true);
     private Scanner scanner;
-    
+
     private int n;
     private Graph graph;
     private List<PointWithIndex> points;
@@ -19,9 +19,9 @@ public class E implements Runnable {
     @Override
     public void run() {
         readData();
-        
+
         calcLeavesSize();
-        
+
         int[] answer = drawTree();
         print(answer);
     }
@@ -31,7 +31,7 @@ public class E implements Runnable {
         graph = readGraph();
         points = readPoints();
     }
-    
+
     private Graph readGraph() {
         Graph graph = new Graph(n);
         for (int i = 0; i < n - 1; i++) {
@@ -39,35 +39,35 @@ public class E implements Runnable {
             int u = scanner.nextInt();
             graph.addEdge(v - 1, u - 1);
         }
-        
+
         return graph;
     }
 
     private List<PointWithIndex> readPoints() {
         List<PointWithIndex> points = new ArrayList<PointWithIndex>(n);
-        
+
         for (int i = 0; i < n; i++) {
             long x = scanner.nextLong();
             long y = scanner.nextLong();
             points.add(new PointWithIndex(x, y, i));
         }
-        
+
         return points;
     }
-    
+
     private void calcLeavesSize() {
         // подвешиваем дерево за первую вешину и считаем размер всех поддеревьев
         sizes = new int[n];
         dfsSize(0, NO_PARENT);
     }
-    
+
     private void dfsSize(int v, int parent) {
         sizes[v] = 1;
-        
+
         for (int u : graph.adjacent(v)) {
             if (u != parent) {
                 dfsSize(u, v);
-                sizes[v] = sizes[v] + sizes[u]; 
+                sizes[v] = sizes[v] + sizes[u];
             }
         }
     }
@@ -75,30 +75,30 @@ public class E implements Runnable {
     public int[] drawTree() {
         PointWithIndex mostLeft = findMostLeft(points);
         Collections.swap(points, 0, mostLeft.index);
-        
+
         ans = new int[n];
         Arrays.fill(ans, -1);
-        
+
         // самая левая точка идет первой
         dfsDraw(0, NO_PARENT, 0, n);
-        
+
         return ans;
     }
-    
+
     public PointWithIndex findMostLeft(List<PointWithIndex> points) {
         return Collections.min(points, new MostLeftPointComparator());
     }
-    
+
     private void dfsDraw(int v, int parent, int left, int rigth) {
         // рекурсивно рисуем дерево
         PointWithIndex point = points.get(left);
         ans[point.index] = v;
-        
+
         int nextLeft = left + 1;
         int nextRight;
-        
+
         Collections.sort(points.subList(nextLeft, rigth), new AnglePointComparator(point));
-        
+
         for (int u : graph.adjacent(v)) {
             if (u != parent) {
                 nextRight = nextLeft + sizes[u];
@@ -107,16 +107,16 @@ public class E implements Runnable {
             }
         }
     }
-    
+
     private void print(int[] answer) {
         for (int i : answer) {
             out.print(i + 1);
             out.print(' ');
         }
-        
+
         out.flush();
     }
-    
+
     public E setInput(InputStream inputStream) {
         this.scanner = new Scanner(inputStream);
         return this;
@@ -130,7 +130,7 @@ public class E implements Runnable {
 class Graph {
     private final int n;
     private final List<List<Integer>> adj;
-    
+
     public Graph(int n) {
         this.n = n;
         this.adj = createAdjacentList(n);
@@ -138,20 +138,20 @@ class Graph {
 
     private static List<List<Integer>> createAdjacentList(int n) {
         List<List<Integer>> res = new ArrayList<List<Integer>>(n);
-        
+
         while (n > 0) {
             res.add(new ArrayList<Integer>());
             n--;
         }
-        
+
         return res;
     }
-    
+
     public void addEdge(int v, int u) {
         adj.get(v).add(u);
         adj.get(u).add(v);
     }
-     
+
     public Iterable<Integer> adjacent(int v) {
         return adj.get(v);
     }
@@ -182,7 +182,7 @@ class MostLeftPointComparator implements Comparator<PointWithIndex> {
         }
         return byx;
     }
-    
+
     public static int compare(long a, long b) {
         return a < b ? -1 : (a == b ? 0 : 1);
     }
