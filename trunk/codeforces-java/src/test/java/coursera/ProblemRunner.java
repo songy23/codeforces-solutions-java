@@ -8,11 +8,14 @@ import notsandbox.Problem;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.CharSequenceInputStream;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Assert;
 
 public class ProblemRunner {
+
+    private PrintWriter stdOutput = new PrintWriter(System.out, true);
 
     private final Problem sut;
     private StringBuilderWriter out;
@@ -37,14 +40,19 @@ public class ProblemRunner {
         sut.run();
         stopWatch.stop();
 
-        System.out.println("Took " + stopWatch + " to launch the test");
-        System.out.println();
+        stdOutput.println("Took " + stopWatch + " to launch the test");
+        stdOutput.println();
+    }
+
+    public ProblemRunner noDebuggingStdOutput() {
+        stdOutput = new PrintWriter(new NullOutputStream(), false);
+        return this;
     }
 
     public void given(String input) {
-        System.out.println("Input:");
-        System.out.println(input);
-        System.out.println();
+        stdOutput.println("Input:");
+        stdOutput.println(input);
+        stdOutput.println();
         setInput(new CharSequenceInputStream(input, Charsets.UTF_8));
     }
 
@@ -71,16 +79,16 @@ public class ProblemRunner {
     }
 
     public void verifyOutput(String output) {
-        System.out.println("Expected:");
-        System.out.println(output);
-        System.out.println();
+        stdOutput.println("Expected:");
+        stdOutput.println(output);
+        stdOutput.println();
 
         String actual = out.toString();
-        System.out.println("Actual:");
-        System.out.println(actual);
+        stdOutput.println("Actual:");
+        stdOutput.println(actual);
 
-        System.out.println();
-        System.out.println();
+        stdOutput.println();
+        stdOutput.println();
 
         Assert.assertArrayEquals(output.split("\\s+"), actual.split("\\s+"));
     }
