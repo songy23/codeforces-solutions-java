@@ -90,6 +90,7 @@ public class ProblemATest {
 
         String output = test.getOutput();
         System.out.println("output: " + output);
+        assertEquals(test.getOutput().trim(), "434821,968,459,313,211");
     }
 
     @Test(dataProvider = "testCasesFromForum")
