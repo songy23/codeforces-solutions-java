@@ -52,7 +52,7 @@ public class ProblemA extends Problem {
     private boolean visited[];
     private int leaders[];
     private int finishingTime[];
-    private int finishingTimeReserved[];
+    private int finishingTimeReversed[];
 
     @Override
     public void run() {
@@ -86,8 +86,8 @@ public class ProblemA extends Problem {
         visited = new boolean[graph.getN()];
         finishingTime = new int[graph.getN()];
         Arrays.fill(finishingTime, -1);
-        finishingTimeReserved = new int[graph.getN()];
-        Arrays.fill(finishingTimeReserved, -1);
+        finishingTimeReversed = new int[graph.getN()];
+        Arrays.fill(finishingTimeReversed, -1);
 
         for (int i = graph.getN() - 1; i >= 0; i--) {
             if (!visited[i]) {
@@ -107,7 +107,7 @@ public class ProblemA extends Problem {
         }
 
         finishingTime[u] = counter;
-        finishingTimeReserved[counter] = u;
+        finishingTimeReversed[counter] = u;
         counter++;
     }
 
@@ -117,7 +117,7 @@ public class ProblemA extends Problem {
         Arrays.fill(leaders, -1);
 
         for (int i = graph.getN() - 1; i >= 0; i--) {
-            int ft = finishingTimeReserved[i];
+            int ft = finishingTimeReversed[i];
             if (!visited[ft]) {
                 currentLeaderVertex = ft;
                 dfs2(ft);
@@ -148,14 +148,6 @@ public class ProblemA extends Problem {
         return leaders;
     }
 
-    public Multiset<Integer> distinctLeaders() {
-        Multiset<Integer> result = HashMultiset.create();
-        for (int i : leaders) {
-            result.add(i);
-        }
-        return result;
-    }
-
     public List<Integer> sortedSizes(int desiredSize) {
         List<Integer> result = sort(countFrequencies());
 
@@ -177,6 +169,14 @@ public class ProblemA extends Problem {
 
         for (Entry<Integer> entry : distinctLeaders.entrySet()) {
             result.add(entry.getCount());
+        }
+        return result;
+    }
+
+    public Multiset<Integer> distinctLeaders() {
+        Multiset<Integer> result = HashMultiset.create();
+        for (int i : leaders) {
+            result.add(i);
         }
         return result;
     }
