@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Undirected graph with weighted edges
+ * 
  * @author Grigorev Alexey
  */
 public class UndirectedWeightedGraph {

@@ -10,7 +10,7 @@ public class HeapTest {
 
     @Test
     public void extractMin() {
-        Heap<String, Integer> h = new Heap<String, Integer>();
+        Heap<String, Integer> h = Heap.naturalMin();
         h.insert("eighth", 8);
         h.insert("seventh", 7);
         h.insert("sixth", 6);
@@ -33,7 +33,7 @@ public class HeapTest {
 
     @Test
     public void extractMinOne() {
-        Heap<String, Integer> h = new Heap<String, Integer>();
+        Heap<String, Integer> h = Heap.naturalMin();
         h.insert("first", 1);
 
         String first = h.pop();
@@ -42,7 +42,7 @@ public class HeapTest {
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void extractMinNone() {
-        Heap<String, Integer> h = new Heap<String, Integer>();
-        h.extractMin();
+        Heap<String, Integer> h = Heap.naturalMin();
+        h.extractFirst();
     }
 }
