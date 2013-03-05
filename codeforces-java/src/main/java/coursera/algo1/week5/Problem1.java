@@ -16,7 +16,7 @@ import notsandbox.Problem;
  * 200. Each row consists of the node tuples that are adjacent to that particular vertex along with the length of that
  * edge. For example, the 6th row has 6 as the first entry indicating that this row corresponds to the vertex labeled 6.
  * The next entry of this row "141,8200" indicates that there is an edge between vertex 6 and vertex 141 that has length
- * 8200. The rest of the pairs of this row indicate the other vertices adjacent to vertex 6 and the lengths of the
+ * 8200. kThe rest of the pairs of this row indicate the other vertices adjacent to vertex 6 and the lengths of the
  * corresponding edges.
  * 
  * Your task is to run Dijkstra's shortest-path algorithm on this graph, using 1 (the first vertex) as the source

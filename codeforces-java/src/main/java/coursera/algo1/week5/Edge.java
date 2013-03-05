@@ -1,6 +1,8 @@
 package coursera.algo1.week5;
 
 /**
+ * A weighted edge for {@link UndirectedWeightedGraph}
+ * 
  * @author Grigorev Alexey
  */
 public class Edge {

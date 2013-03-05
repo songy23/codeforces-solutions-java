@@ -20,7 +20,7 @@ public class DijkstrasAlgorithm {
 
         List<HeapNode<Integer, Integer>> heapNodesList = heapNodesList(graph.getN());
 
-        Heap<Integer, Integer> heap = new Heap<Integer, Integer>();
+        Heap<Integer, Integer> heap = Heap.naturalMin();
         HeapNode<Integer, Integer> sourceHeapNode = heap.insert(s, 0);
         heapNodesList.set(s, sourceHeapNode);
 
@@ -34,7 +34,7 @@ public class DijkstrasAlgorithm {
         int n = graph.getN();
 
         while (n > 0) {
-            HeapNode<Integer, Integer> node = heap.extractMin();
+            HeapNode<Integer, Integer> node = heap.extractFirst();
             int distance = node.getKey();
             int nodeNumber = node.getValue();
             dist[nodeNumber] = distance;
