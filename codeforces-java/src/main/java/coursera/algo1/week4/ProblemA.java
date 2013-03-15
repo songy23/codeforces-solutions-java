@@ -75,7 +75,7 @@ public class ProblemA extends Problem {
             graph.addEdge(v - 1, u - 1);
 
             if (i % 1000 == 0) {
-                System.out.println(i + "th has been just processed");
+                System.out.println(i + "th has been just read");
             }
         }
 

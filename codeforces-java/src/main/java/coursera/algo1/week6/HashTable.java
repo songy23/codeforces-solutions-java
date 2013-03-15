@@ -28,6 +28,7 @@ public class HashTable {
 
         if (prevNode.getValue() == i) {
             hashTable[hash] = prevNode.getNext();
+            return;
         }
 
         HashTableNode node = prevNode.getNext();

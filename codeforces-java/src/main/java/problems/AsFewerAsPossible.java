@@ -1,8 +1,5 @@
 package problems;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +14,6 @@ import com.google.common.collect.Sets;
 public class AsFewerAsPossible implements Runnable {
 
     private PrintWriter out = new PrintWriter(System.out, true);
-    private BufferedReader reader;
 
     @Override
     public void run() {
@@ -28,16 +24,6 @@ public class AsFewerAsPossible implements Runnable {
         Result result = Sum.find(Lists.newArrayList(in), sum);
         return Sets.newHashSet(result.getElements());
     }
-
-    public AsFewerAsPossible setInput(InputStream inputStream) {
-        this.reader = new BufferedReader(new InputStreamReader(inputStream));
-        return this;
-    }
-
-    public static void main(String[] args) {
-        new AsFewerAsPossible().setInput(System.in).run();
-    }
-
 }
 
 class Sum {
