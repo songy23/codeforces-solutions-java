@@ -71,6 +71,6 @@ public class HashTableTest {
         table.remove(150);
         table.remove(200);
 
-        assertFalse(table.contains(250));
+        assertFalse(table.contains(100));
     }
 }

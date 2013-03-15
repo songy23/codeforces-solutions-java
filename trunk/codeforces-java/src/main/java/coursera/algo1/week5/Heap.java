@@ -88,6 +88,11 @@ public class Heap<E, K> {
         }
     }
 
+    /**
+     * Gets the value stored in the front without removing it from the heap
+     * 
+     * @return the front value
+     */
     public E peek() {
         ensureNotEmpty();
         return heap.get(0).getValue();

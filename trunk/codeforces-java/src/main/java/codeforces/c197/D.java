@@ -147,22 +147,22 @@ class DFS {
     }
 }
 
-class QuickStack<E> {
-    private final E[] values;
+class QuickStack<Elem> {
+    private final Elem[] values;
     private int head = -1;
 
     @SuppressWarnings("unchecked")
     public QuickStack(int capacity) {
-        values = (E[]) new Object[capacity];
+        values = (Elem[]) new Object[capacity];
     }
 
-    public void push(E element) {
+    public void push(Elem element) {
         head++;
         values[head] = element;
     }
 
-    public E pop() {
-        E res = values[head];
+    public Elem pop() {
+        Elem res = values[head];
         values[head] = null;
         head--;
         return res;

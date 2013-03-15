@@ -2,14 +2,7 @@ package coursera.algo1.week1;
 
 import java.util.Arrays;
 
-import notsandbox.Problem;
-
-public class MergeSort extends Problem {
-
-    @Override
-    public void run() {
-        // noop
-    }
+public class MergeSort {
 
     public int[] mergeSort(int[] input) {
         int n = input.length;
