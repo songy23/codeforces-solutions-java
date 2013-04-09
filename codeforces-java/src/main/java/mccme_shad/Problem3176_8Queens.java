@@ -15,26 +15,36 @@ public class Problem3176_8Queens implements Runnable {
 
     @Override
     public void run() {
-        List<QueenPosition> queens = readData();
+        List<Queen> queens = readData();
 
         boolean res = solve(queens);
 
-        out.print(res ? "YES" : "NO");
+        out.print(res ? "NO" : "YES");
         out.flush();
     }
 
-    public boolean solve(List<QueenPosition> queens) {
-        return new QueensBoard(queens).solve();
+    public boolean solve(List<Queen> queens) {
+        int n = queens.size();
+        for (int i = 0; i < n; i++) {
+            Queen firstQueen = queens.get(i);
+            for (int j = i + 1; j < n; j++) {
+                Queen secondQueen = queens.get(j);
+                if (firstQueen.strikes(secondQueen)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
-    private List<QueenPosition> readData() {
-        List<QueenPosition> queens = new ArrayList<QueenPosition>(8);
+    private List<Queen> readData() {
+        List<Queen> queens = new ArrayList<Queen>(8);
         while (scanner.hasNext()) {
-            String next = scanner.next();
+            String next = scanner.nextLine();
             String[] input = next.split("\\s+");
             int x = Integer.parseInt(input[0]) - 1;
-            int y = Integer.parseInt(input[0]) - 1;
-            queens.add(new QueenPosition(x, y));
+            int y = Integer.parseInt(input[1]) - 1;
+            queens.add(new Queen(x, y));
         }
         return queens;
     }
@@ -49,37 +59,11 @@ public class Problem3176_8Queens implements Runnable {
     }
 }
 
-class QueensBoard {
-
-    private final List<QueenPosition> queens;
-    private final boolean horisontal[];
-    private final boolean vertical[];
-
-    public QueensBoard(List<QueenPosition> queens) {
-        this.queens = queens;
-        this.horisontal = new boolean[queens.size()];
-        this.vertical = new boolean[queens.size()];
-    }
-
-    public boolean solve() {
-        for (QueenPosition queen : queens) {
-            if (horisontal[queen.getY()]) {
-                return false;
-            }
-
-            if (vertical[queen.getY()]) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
-class QueenPosition {
+class Queen {
     private final int x;
     private final int y;
 
-    public QueenPosition(int x, int y) {
+    public Queen(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -90,5 +74,26 @@ class QueenPosition {
 
     public int getY() {
         return y;
+    }
+
+    public boolean strikes(Queen that) {
+        return sameHorizontal(that) || sameVertical(that) || sameDiagonal(that);
+    }
+
+    public boolean sameHorizontal(Queen that) {
+        return this.y == that.y;
+    }
+
+    public boolean sameVertical(Queen that) {
+        return this.x == that.x;
+    }
+
+    public boolean sameDiagonal(Queen that) {
+        return Math.abs(this.x - that.x) == Math.abs(this.y - that.y);
+    }
+
+    @Override
+    public String toString() {
+        return "{" + x + ", " + y + "}";
     }
 }
