@@ -24,45 +24,70 @@ public class BranchAndBounds {
         bestBound = 0.0;
 
         double bound = calcBound(list, capacity, 0.0);
-        Cons res = dfs(list.head, list.tail, 0, capacity, bound, null);
+        Sol res = dfs(list.head, list.tail, 0, capacity, bound, null);
 
         int value = 0;
         BitSet backtrack = new BitSet(size);
-        while (res != null) {
-            Knapsack.Item item = res.head;
+        Cons cell = res.taken;
+        while (cell != null) {
+            Knapsack.Item item = cell.head;
             value = value + item.value;
             backtrack.set(item.number);
-            res = res.tail;
+            cell = cell.tail;
         }
 
         return new Knapsack.KnapsackResult(value, backtrack, size);
     }
 
-    public Cons dfs(Knapsack.Item item, Cons tail, int value, int weight, double bound, Cons taken) {
+    public Sol dfs(Knapsack.Item item, Cons tail, int value, int weight, double bound, Cons taken) {
         if (bound < bestBound) {
             return null;
         }
+        // TODO: item is not considered when the tail is null
         if (tail == null) {
             bestBound = bound;
-            return taken;
+            return new Sol(bound, taken);
         }
         if (item.weight > weight) {
-            return notTaking(tail, value, weight, bound, taken);
+            return notTaking(tail, value, weight, taken);
         }
 
         // taking the item
-        Cons left = dfs(tail.head, tail.tail, value + item.value, weight - item.weight, bound, cons(item, taken));
+        Sol left = dfs(tail.head, tail.tail, value + item.value, weight - item.weight, bound, cons(item, taken));
 
         // not taking the item
-        Cons right = notTaking(tail, value, weight, bound, taken);
+        Sol right = notTaking(tail, value, weight, taken);
 
         if (left == null) {
             return right;
         }
-        return left;
+        if (right == null) {
+            return left;
+        }
+
+        if (right.bound > left.bound) {
+            return right;
+        } else {
+            return left;
+        }
     }
 
-    private Cons notTaking(Cons tail, int value, int weight, double bound, Cons taken) {
+    public static class Sol {
+        private final double bound;
+        private final Cons taken;
+
+        public Sol(double bound, Cons taken) {
+            this.bound = bound;
+            this.taken = taken;
+        }
+
+        @Override
+        public String toString() {
+            return "(" + bound + "; [" + taken != null ? taken.join(",") : "" + "])";
+        }
+    }
+
+    private Sol notTaking(Cons tail, int value, int weight, Cons taken) {
         Cons without;
         if (taken != null) {
             Cons reverse = taken.reverse();
@@ -70,15 +95,14 @@ public class BranchAndBounds {
         } else {
             without = tail;
         }
-        double newBound = bound + calcBound(without, weight, 0.0);
+        double newBound = calcBound(without, capacity, 0.0);
         if (newBound <= bestBound) {
             return null;
         }
-        Cons right = dfs(tail.head, tail.tail, value, weight, newBound, taken);
-        return right;
+        return dfs(tail.head, tail.tail, value, weight, newBound, taken);
     }
 
-    private double calcBound(Cons list, int k, double acc) {
+    public static double calcBound(Cons list, int k, double acc) {
         if (list == null) {
             return acc;
         }
@@ -95,20 +119,20 @@ public class BranchAndBounds {
         return new Cons(head, tail);
     }
 
-    private static Knapsack.Item[] preSort(Knapsack.Item[] items) {
+    public static Knapsack.Item[] preSort(Knapsack.Item[] items) {
         Knapsack.Item[] clone = items.clone();
         Arrays.sort(clone, new Comparator<Knapsack.Item>() {
             @Override
             public int compare(Knapsack.Item o1, Knapsack.Item o2) {
                 double relativeValue1 = o1.relativeValue();
                 double relativeValue2 = o2.relativeValue();
-                return Double.compare(relativeValue1, relativeValue2);
+                return -Double.compare(relativeValue1, relativeValue2);
             }
         });
         return clone;
     }
 
-    private static class Cons {
+    public static class Cons {
         final Knapsack.Item head;
         final Cons tail;
 
