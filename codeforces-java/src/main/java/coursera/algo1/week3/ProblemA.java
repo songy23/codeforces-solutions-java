@@ -43,7 +43,7 @@ public class ProblemA extends Problem {
         initialGraphCopy = graph.copy();
         best = Integer.MAX_VALUE;
 
-        int trials = 200;
+        int trials = 25; // might be wrong, 200 should work for sure
 
         while (trials > 0) {
             iteration();

@@ -1,40 +1,40 @@
 package optimization.knapsack;
 
 import java.io.PrintWriter;
-import java.util.BitSet;
 
 public class Knapsack {
 
-    protected final int capacity;
-    protected final Item[] items;
+    public static interface KnapsackSolver {
+        KnapsackResult solve(Knapsack data);
+    }
+
+    private final int capacity;
+    private final Item[] items;
 
     public Knapsack(int capacity, Item[] items) {
         this.capacity = capacity;
         this.items = items;
     }
 
-    public KnapsackResult solve() {
-        // return dynamic();
-        return branchAndBound();
+    public KnapsackResult solve(KnapsackSolver solver) {
+        return solver.solve(this);
     }
 
-    public KnapsackResult dynamic() {
-        return new DynamicOptimized(capacity, items).solve();
+    public int getCapacity() {
+        return capacity;
     }
 
-    public KnapsackResult branchAndBound() {
-        return new BranchAndBounds(capacity, items).solve();
+    public Item[] getItems() {
+        return items;
     }
 
     public static class KnapsackResult {
         private final int value;
-        protected final BitSet result;
-        private final int size;
+        private final int[] result;
 
-        public KnapsackResult(int value, BitSet result, int size) {
+        public KnapsackResult(int value, int[] result) {
             this.value = value;
             this.result = result;
-            this.size = size;
         }
 
         public void printTo(PrintWriter out) {
@@ -42,21 +42,15 @@ public class Knapsack {
             out.print(' ');
             out.print(1); // indicates that the solution is optimal
             out.print('\n');
-            for (int i = 0; i < size; i++) {
-                out.print(result.get(i) ? 1 : 0);
+            for (int i = 0; i < result.length; i++) {
+                out.print(result[i]);
                 out.print(' ');
             }
             out.flush();
         }
 
         public int[] getResult() {
-            int res[] = new int[size];
-            for (int i = 0; i < size; i++) {
-                if (result.get(i)) {
-                    res[i] = 1;
-                }
-            }
-            return res;
+            return result.clone();
         }
 
         public int getValue() {

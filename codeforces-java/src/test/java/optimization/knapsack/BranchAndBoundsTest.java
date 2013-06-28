@@ -1,6 +1,5 @@
 package optimization.knapsack;
 
-import optimization.knapsack.BranchAndBounds.Cons;
 import optimization.knapsack.Knapsack.Item;
 import optimization.knapsack.Knapsack.KnapsackResult;
 
@@ -24,7 +23,7 @@ public class BranchAndBoundsTest {
     @Test
     public void calcBound() {
         Item[] items = BranchAndBounds.preSort(new Item[] { i(0, 10, 5), i(1, 30, 2), i(2, 10, 1), i(3, 10, 3) });
-        Cons cons = BranchAndBounds.Cons.from(items);
+        Cons<Item> cons = Cons.from(items);
 
         double res = BranchAndBounds.calcBound(cons, 100, 0.0);
         assertEquals(res, 60.0);
@@ -32,7 +31,7 @@ public class BranchAndBoundsTest {
         double res2 = BranchAndBounds.calcBound(cons, 5, 0.0);
         assertEquals(res2, 46.66, 0.1);
 
-        double res3 = BranchAndBounds.calcBound(cons.tail, 5, 0.0);
+        double res3 = BranchAndBounds.calcBound(cons.tail(), 5, 0.0);
         assertEquals(res3, 22.0);
     }
 
@@ -52,7 +51,6 @@ public class BranchAndBoundsTest {
 
     @Test
     public void fromLecture() {
-        // "3 9\n" + "5 4\n" + "6 5\n" + "3 2", "11 1\n" + "1 1 0"
         Item[] items = new Item[] { i(0, 45, 5), i(1, 48, 8), i(2, 35, 3) };
         BranchAndBounds branchAndBounds = new BranchAndBounds(10, items);
 

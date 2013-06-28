@@ -33,20 +33,19 @@ public class SolverTest {
     }
 
     @Test(dataProvider = "files"/* , enabled = false */)
-    public void expensive(String fileName, int optimalValue) {
+    public void expensive(String fileName, String outputFile) {
         Solver sut = new Solver();
         TestComparer test = new TestComparer(sut);
         test.inputFromFile(fileName);
-        KnapsackResult result = sut.solve();
-
-        System.out.println("Got: " + result.getValue() + ", wanted 3967180");
-        assertTrue(result.getValue() >= optimalValue);
+        test.run();
+        test.verifyFromFile(outputFile);
     }
 
     @DataProvider
     public Object[][] files() {
-        return new Object[][] { { "ks_400_0", 3967180 },
-        // { "ks_10000_0" },
+        return new Object[][] { 
+            { "ks_400_0", "ks_400_0_output" },
+            { "ks_10000_0", "ks_10000_0_output" },
         };
     }
 
@@ -55,7 +54,7 @@ public class SolverTest {
         int capacity = 10;
         Item[] items = { i(0, 10, 11), i(1, 11, 9), i(0, 5, 2) };
         Knapsack knapsack = new Knapsack(capacity, items);
-        KnapsackResult result = knapsack.solve();
+        KnapsackResult result = knapsack.solve(new BranchAndBounds.Strategy());
         assertEquals(asList(result.getResult()), expected(0, 1, 0));
     }
 

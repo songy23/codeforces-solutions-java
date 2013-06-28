@@ -1,11 +1,18 @@
 package optimization.knapsack;
 
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Comparator;
-import java.util.Iterator;
+
+import optimization.knapsack.Knapsack.KnapsackResult;
 
 public class BranchAndBounds {
+
+    public static class Strategy implements Knapsack.KnapsackSolver {
+        @Override
+        public KnapsackResult solve(Knapsack data) {
+            return new BranchAndBounds(data.getCapacity(), data.getItems()).solve();
+        }
+    }
 
     private final Knapsack.Item[] items;
     private final int capacity;
@@ -20,43 +27,47 @@ public class BranchAndBounds {
     }
 
     public Knapsack.KnapsackResult solve() {
-        Cons list = Cons.from(items);
+        Cons<Knapsack.Item> list = Cons.from(items);
         bestBound = 0.0;
 
         double bound = calcBound(list, capacity, 0.0);
-        Sol res = dfs(list.head, list.tail, 0, capacity, bound, null);
+        Solution res = dfs(list, 0, capacity, bound, null);
 
-        int value = 0;
-        BitSet backtrack = new BitSet(size);
-        Cons cell = res.taken;
-        while (cell != null) {
-            Knapsack.Item item = cell.head;
-            value = value + item.value;
-            backtrack.set(item.number);
-            cell = cell.tail;
-        }
-
-        return new Knapsack.KnapsackResult(value, backtrack, size);
+        return buildSolution(res);
     }
 
-    public Sol dfs(Knapsack.Item item, Cons tail, int value, int weight, double bound, Cons taken) {
+    private Knapsack.KnapsackResult buildSolution(Solution res) {
+        int value = 0;
+        int[] result = new int[size];
+        Cons<Knapsack.Item> cell = res.taken;
+        while (cell != null) {
+            Knapsack.Item item = cell.head();
+            value = value + item.value;
+            result[item.number] = 1;
+            cell = cell.tail();
+        }
+
+        return new Knapsack.KnapsackResult(value, result);
+    }
+
+    public Solution dfs(Cons<Knapsack.Item> list, int value, int weight, double bound, Cons<Knapsack.Item> taken) {
         if (bound < bestBound) {
             return null;
         }
-        // TODO: item is not considered when the tail is null
-        if (tail == null) {
+        if (list == null) {
             bestBound = bound;
-            return new Sol(bound, taken);
+            return new Solution(bound, taken);
         }
+        Knapsack.Item item = list.head();
         if (item.weight > weight) {
-            return notTaking(tail, value, weight, taken);
+            return notTaking(list, value, weight, taken);
         }
 
         // taking the item
-        Sol left = dfs(tail.head, tail.tail, value + item.value, weight - item.weight, bound, cons(item, taken));
+        Solution left = dfs(list.tail(), value + item.value, weight - item.weight, bound, Cons.cons(item, taken));
 
         // not taking the item
-        Sol right = notTaking(tail, value, weight, taken);
+        Solution right = notTaking(list, value, weight, taken);
 
         if (left == null) {
             return right;
@@ -64,7 +75,6 @@ public class BranchAndBounds {
         if (right == null) {
             return left;
         }
-
         if (right.bound > left.bound) {
             return right;
         } else {
@@ -72,26 +82,11 @@ public class BranchAndBounds {
         }
     }
 
-    public static class Sol {
-        private final double bound;
-        private final Cons taken;
-
-        public Sol(double bound, Cons taken) {
-            this.bound = bound;
-            this.taken = taken;
-        }
-
-        @Override
-        public String toString() {
-            return "(" + bound + "; [" + taken != null ? taken.join(",") : "" + "])";
-        }
-    }
-
-    private Sol notTaking(Cons tail, int value, int weight, Cons taken) {
-        Cons without;
+    private Solution notTaking(Cons<Knapsack.Item> list, int value, int weight, Cons<Knapsack.Item> taken) {
+        Cons<Knapsack.Item> tail = list.tail();
+        Cons<Knapsack.Item> without;
         if (taken != null) {
-            Cons reverse = taken.reverse();
-            without = reverse.append(tail);
+            without = taken.reverse().append(tail);
         } else {
             without = tail;
         }
@@ -99,24 +94,35 @@ public class BranchAndBounds {
         if (newBound <= bestBound) {
             return null;
         }
-        return dfs(tail.head, tail.tail, value, weight, newBound, taken);
+        return dfs(tail, value, weight, newBound, taken);
     }
 
-    public static double calcBound(Cons list, int k, double acc) {
+    public static double calcBound(Cons<Knapsack.Item> list, int k, double acc) {
         if (list == null) {
             return acc;
         }
 
-        Knapsack.Item head = list.head;
+        Knapsack.Item head = list.head();
         if (head.weight <= k) {
-            return calcBound(list.tail, k - head.weight, acc + head.value);
+            return calcBound(list.tail(), k - head.weight, acc + head.value);
         } else {
             return acc + head.relativeValue() * k;
         }
     }
 
-    private static Cons cons(Knapsack.Item head, Cons tail) {
-        return new Cons(head, tail);
+    public static class Solution {
+        private final double bound;
+        private final Cons<Knapsack.Item> taken;
+
+        public Solution(double bound, Cons<Knapsack.Item> taken) {
+            this.bound = bound;
+            this.taken = taken;
+        }
+
+        @Override
+        public String toString() {
+            return "(" + bound + ", [" + taken != null ? taken.join(",") : "" + "])";
+        }
     }
 
     public static Knapsack.Item[] preSort(Knapsack.Item[] items) {
@@ -130,67 +136,6 @@ public class BranchAndBounds {
             }
         });
         return clone;
-    }
-
-    public static class Cons {
-        final Knapsack.Item head;
-        final Cons tail;
-
-        public Cons(Knapsack.Item head, Cons tail) {
-            if (head == null) {
-                throw new NullPointerException();
-            }
-            this.head = head;
-            this.tail = tail;
-        }
-
-        public static Cons from(Knapsack.Item... items) {
-            return from(Arrays.asList(items).iterator());
-        }
-
-        private static Cons from(Iterator<Knapsack.Item> items) {
-            if (items.hasNext()) {
-                return new Cons(items.next(), from(items));
-            } else {
-                return null;
-            }
-        }
-
-        public Cons reverse() {
-            return reverse(this, null);
-        }
-
-        private static Cons reverse(Cons list, Cons acc) {
-            if (list == null) {
-                return acc;
-            } else {
-                return reverse(list.tail, cons(list.head, acc));
-            }
-        }
-
-        public Cons append(Cons list2) {
-            return append(this, list2);
-        }
-
-        private static Cons append(Cons list1, Cons list2) {
-            if (list1 == null) {
-                return list2;
-            }
-            return cons(list1.head, append(list1.tail, list2));
-        }
-
-        @Override
-        public String toString() {
-            return "[" + join(", ") + "]";
-        }
-
-        public String join(String joiner) {
-            if (tail == null) {
-                return head.toString();
-            }
-
-            return head.toString() + joiner + tail.join(joiner);
-        }
     }
 
 }

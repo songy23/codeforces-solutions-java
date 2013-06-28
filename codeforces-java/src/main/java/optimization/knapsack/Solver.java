@@ -10,6 +10,7 @@ public class Solver implements Runnable {
 
     protected PrintWriter out = new PrintWriter(System.out, true);
     protected Scanner scanner;
+    private static String mode = "branchbound";
 
     @Override
     public void run() {
@@ -17,7 +18,16 @@ public class Solver implements Runnable {
     }
 
     public KnapsackResult solve() {
-        return readInput().solve();
+        Knapsack knapsack = readInput();
+        if ("dynamic".equals(mode)) {
+            return knapsack.solve(new KnapsackClassic());
+        } else if ("dynamicoptimized".equals(mode)) {
+            return knapsack.solve(new DynamicOptimized());
+        } else if ("branchbound".equals(mode)) {
+            return knapsack.solve(new BranchAndBounds.Strategy());
+        }
+
+        throw new IllegalStateException("wrong mode " + mode);
     }
 
     public Knapsack readInput() {
