@@ -14,7 +14,7 @@ import codeforces.TestComparer;
 
 import static org.testng.Assert.*;
 
-public class DynamicTest {
+public class SolverTest {
 
     @Test(dataProvider = "stringInput")
     public void stringInputTest(String input, String output) {
@@ -33,19 +33,19 @@ public class DynamicTest {
     }
 
     @Test(dataProvider = "files"/* , enabled = false */)
-    public void expensive(String fileName) {
+    public void expensive(String fileName, int optimalValue) {
         Solver sut = new Solver();
         TestComparer test = new TestComparer(sut);
         test.inputFromFile(fileName);
         KnapsackResult result = sut.solve();
 
         System.out.println("Got: " + result.getValue() + ", wanted 3967180");
-        assertTrue(result.getValue() >= 3967180);
+        assertTrue(result.getValue() >= optimalValue);
     }
 
     @DataProvider
     public Object[][] files() {
-        return new Object[][] { { "ks_400_0" },
+        return new Object[][] { { "ks_400_0", 3967180 },
         // { "ks_10000_0" },
         };
     }
