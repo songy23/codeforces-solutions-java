@@ -1,19 +1,14 @@
 package optimization.knapsack;
 
 import java.util.Arrays;
-import java.util.BitSet;
 
-public class DynamicOptimized {
 
-    protected final int capacity;
-    protected final Knapsack.Item[] items;
+public class DynamicOptimized implements Knapsack.KnapsackSolver {
 
-    public DynamicOptimized(int capacity, Knapsack.Item[] items) {
-        this.capacity = capacity;
-        this.items = items;
-    }
-
-    public Knapsack.KnapsackResult solve() {
+    @Override
+    public Knapsack.KnapsackResult solve(Knapsack data) {
+        int capacity = data.getCapacity();
+        Knapsack.Item[] items = data.getItems();
         // http://0agr.ru/blog/2011/04/17/Задача-об-упаковке-рюкзака/
         Cell[] line = new Cell[capacity + 1];
         Arrays.fill(line, Cell.FIRST);
@@ -35,15 +30,15 @@ public class DynamicOptimized {
             }
         }
 
-        BitSet res = new BitSet(items.length);
+        int[] res = new int[items.length];
         Cell cell = line[capacity];
         int optimalSolution = cell.value;
         while (cell.isNotFirst()) {
-            res.set(cell.itemNumber);
+            res[cell.itemNumber] = 1;
             cell = cell.previous;
         }
 
-        return new Knapsack.KnapsackResult(optimalSolution, res, items.length);
+        return new Knapsack.KnapsackResult(optimalSolution, res);
     }
 
     private static class Cell {
@@ -77,4 +72,5 @@ public class DynamicOptimized {
             return itemNumber + (previous != null ? "," + previous.list() : "");
         }
     }
+
 }
