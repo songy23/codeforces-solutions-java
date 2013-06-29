@@ -32,7 +32,7 @@ public class SolverTest {
                 { "4 11\n" + "15 8\n" + "4 3\n" + "8 4\n" + "10 5\n", "19 1\n" + "1 1 0 0" } };
     }
 
-    @Test(dataProvider = "files"/* , enabled = false */)
+    @Test(dataProvider = "files")
     public void expensive(String fileName, String outputFile) {
         Solver sut = new Solver();
         TestComparer test = new TestComparer(sut);

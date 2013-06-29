@@ -69,7 +69,7 @@ public class Cons<E> {
     }
 
     public String join(String joiner) {
-        if (tail() == null) {
+        if (tail == null) {
             return head.toString();
         }
 
