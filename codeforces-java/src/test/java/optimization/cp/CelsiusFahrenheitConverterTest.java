@@ -2,6 +2,8 @@ package optimization.cp;
 
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
+
 public class CelsiusFahrenheitConverterTest {
 
     @Test
@@ -17,7 +19,12 @@ public class CelsiusFahrenheitConverterTest {
         CelsiusFahrenheitConverter.converter(c, f);
 
         c.setValue("user", 10.0);
-        System.out.println(f.getValue());
+        assertEquals(f.getValue(), 50.0);
+        
+        c.forgetValue("user");
 
+        f.setValue("user", 50.0);
+        assertEquals(c.getValue(), 10.0);
+        
     }
 }
