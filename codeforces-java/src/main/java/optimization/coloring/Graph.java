@@ -1,48 +1,80 @@
 package optimization.coloring;
 
-import java.util.*;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-/**
- * @author Grigorev Alexey
- */
 public class Graph {
     private int n;
-    private final ArrayList<Edge> edges;
+    private final List<Vertex> vertices;
 
     public Graph(int n) {
         this.n = n;
-        this.edges = new ArrayList<Edge>();
+        this.vertices = createAdjacencyList(n);
     }
 
-    /**
-     * Adds a directed edge from vertex v to vertex u
-     * 
-     * @param v vertex from
-     * @param u vertex to
-     */
-    public void addEdge(int v, int u) {
-        Edge edge = new Edge(-1, v, u);
-        edges.add(edge);
+    private static List<Vertex> createAdjacencyList(int n) {
+        List<Vertex> res = new ArrayList<Vertex>(n);
+
+        int i = 0;
+        while (i < n) {
+            res.add(new Vertex(i));
+            i++;
+        }
+
+        return res;
+    }
+
+    public void addEdge(int from, int to) {
+        Vertex vertex1 = vertices.get(from);
+        Vertex vertex2 = vertices.get(to);
+        vertex1.addNodeTo(vertex2);
+        vertex2.addNodeTo(vertex1);
     }
 
     public int getN() {
         return n;
     }
 
-    public List<Edge> getEdges() {
-        return edges;
+    public List<Vertex> allVerticies() {
+        return new ArrayList<Vertex>(vertices);
     }
 
-    public static class Edge {
-        int color;
-        int from;
-        int to;
+    public int[] colors() {
+        int[] colors = new int[n];
+        for (Vertex v : vertices) {
+            colors[v.number] = v.color;
+        }
+        return colors;
+    }
 
-        public Edge(int color, int from, int to) {
-            this.color = color;
-            this.from = from;
-            this.to = to;
+    public void outoutTo(int optValue, boolean optimal, PrintWriter out) {
+        out.print(optValue);
+        out.print(' ');
+        out.print(optimal ? 1 : 0);
+        out.println();
+
+        int[] colors = colors();
+        for (int i = 0; i < n; i++) {
+            out.print(colors[i]);
+            out.print(' ');
+        }
+        out.flush();
+    }
+
+    public static class Vertex {
+        int color = -1;
+        final int number;
+        final List<Vertex> adjacent = new LinkedList<Vertex>();
+
+        public Vertex(int from) {
+            this.number = from;
         }
 
+        public void addNodeTo(Vertex to) {
+            adjacent.add(to);
+        }
     }
+
 }

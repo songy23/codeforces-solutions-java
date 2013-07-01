@@ -6,7 +6,7 @@ import java.util.Random;
 import org.apache.commons.lang3.time.StopWatch;
 
 public class RandomGen {
-    static Random r = new Random();
+    private final static Random RANDOM = new Random();
 
     public static void main(String[] args) {
         char begin = 'а' - 1;
@@ -19,8 +19,6 @@ public class RandomGen {
 
         System.out.println(Arrays.toString(s));
 
-        int k = 0;
-
         tryAll(s);
     }
 
@@ -31,7 +29,7 @@ public class RandomGen {
         while (true) {
             int[] trial = new int[6];
             for (int i = 0; i < 6; i++) {
-                int next = r.nextInt(34);
+                int next = RANDOM.nextInt(34);
                 trial[i] = next;
             }
 

@@ -86,7 +86,7 @@ public class TestComparer {
         System.out.println(output);
         System.out.println();
 
-        String actual = out.toString();
+        String actual = capturedOutput();
         System.out.println("Actual:");
         System.out.println(actual);
 
@@ -94,6 +94,14 @@ public class TestComparer {
         System.out.println();
 
         Assert.assertArrayEquals(output.split("\\s+"), actual.split("\\s+"));
+    }
+
+    public PrintWriter outputStream() {
+        return printWriter();
+    }
+
+    public String capturedOutput() {
+        return out.toString();
     }
 
 }

@@ -1,40 +1,61 @@
 package optimization.coloring;
 
+import java.io.PrintWriter;
 import java.util.*;
 
-import optimization.coloring.Graph.Edge;
+import optimization.coloring.Graph.Vertex;
 
+/**
+ * Новиков - дискретная математика для программистов, последняя глава
+ * 
+ * @author Grigorev Alexey
+ * 
+ */
 public class Greedy {
 
-    public void Solve(Graph graph) {
-        List<List<Integer>> g = createAdjacentList(graph.getN());
-
-        for (Edge e : graph.getEdges()) {
-            g.get(e.from).add(e.to);
-            g.get(e.to).add(e.from);
-        }
-        
-        ArrayList<List<Integer>> copy = new ArrayList<List<Integer>>(g);
-        Collections.sort(copy, new Comparator<List<Integer>> () {
-            @Override
-            public int compare(List<Integer> o1, List<Integer> o2) {
-                return -(o1.size() - o2.size());
-            }
-        });
-        
-        
+    public void solve(Graph graph, PrintWriter out) {
+        List<Vertex> allVerticies = prepare(graph);
+        int color = color(allVerticies);
+        graph.outoutTo(color, false, out);
     }
 
-    private static ArrayList<List<Integer>> createAdjacentList(int n) {
-        ArrayList<List<Integer>> res = new ArrayList<List<Integer>>(n);
+    private List<Vertex> prepare(Graph graph) {
+        List<Vertex> allVerticies = graph.allVerticies();
 
-        int i = 0;
-        while (i < n) {
-            res.add(new LinkedList<Integer>());
-            i++;
+        Collections.sort(allVerticies, new Comparator<Vertex>() {
+            @Override
+            public int compare(Vertex o1, Vertex o2) {
+                return o2.adjacent.size() - o1.adjacent.size();
+            }
+        });
+
+        return new LinkedList<Vertex>(allVerticies);
+    }
+
+    private int color(List<Vertex> allVerticies) {
+        int color = 0;
+
+        while (!allVerticies.isEmpty()) {
+            Iterator<Vertex> iterator = allVerticies.iterator();
+
+            while (iterator.hasNext()) {
+                Vertex current = iterator.next();
+
+                boolean allGood = true;
+                for (Vertex to : current.adjacent) {
+                    if (to.color == color) {
+                        allGood = false;
+                        break;
+                    }
+                }
+                if (allGood) {
+                    current.color = color;
+                    iterator.remove();
+                }
+            }
+            color++;
         }
-
-        return res;
+        return color;
     }
 
 }
