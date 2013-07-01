@@ -10,7 +10,11 @@ public class Multiplier implements Constraint<Double> {
     private final Connector<Double> output;
 
     public static Multiplier register(Connector<Double> input1, Connector<Double> input2, Connector<Double> output) {
-        return new Multiplier(input1, input2, output);
+        Multiplier multiplier = new Multiplier(input1, input2, output);
+        input1.addConstraint(multiplier);
+        input2.addConstraint(multiplier);
+        output.addConstraint(multiplier);
+        return multiplier;
     }
 
     public Multiplier(Connector<Double> input1, Connector<Double> input2, Connector<Double> output) {
@@ -20,7 +24,7 @@ public class Multiplier implements Constraint<Double> {
     }
 
     @Override
-    public void informAboutForget(Connector<Double> connector) {
+    public void informAboutNewValue(Connector<Double> connector) {
         if ((input1.hasValue() && input1.getValue() == 0.0) || (input2.hasValue() && input2.getValue() == 0.0)) {
             output.setValue(this, 0.0);
         } else if (input1.hasValue() && input2.hasValue()) {
@@ -28,18 +32,19 @@ public class Multiplier implements Constraint<Double> {
             output.setValue(this, result);
         } else if (output.hasValue() && input1.hasValue()) {
             Double result = output.getValue() / input1.getValue();
-            output.setValue(input2, result);
+            input2.setValue(this, result);
         } else if (output.hasValue() && input2.hasValue()) {
             Double result = output.getValue() / input2.getValue();
-            output.setValue(input1, result);
+            input1.setValue(this, result);
         }
     }
 
     @Override
-    public void informAboutNewValue(Connector<Double> connector) {
+    public void informAboutForget(Connector<Double> connector) {
         input1.forgetValue(this);
         input2.forgetValue(this);
-        output.forgetValue(this);
+        output.forgetValue(this);        
     }
+
 
 }

@@ -26,25 +26,33 @@ public class Connector<E> {
     public final void forgetValue(Object retractor) {
         if (retractor == informant) {
             this.value = Optional.absent();
-            informAboutForget();
+            informAboutForget(retractor);
         }
     }
 
-    private void informAboutForget() {
+    private void informAboutForget(Object retractor) {
         for (Constraint<E> constraint : constraints) {
-            constraint.informAboutForget(this);
+            if (retractor != constraint) {
+                constraint.informAboutForget(this);
+            }
         }
     }
 
     public final void setValue(Object informant, E value) {
-        this.informant = informant;
-        this.value = Optional.of(value);
-        informAboutNewValue();
+        if (!hasValue()) {
+            this.informant = informant;
+            this.value = Optional.of(value);
+            informAboutNewValue(informant);
+        } else if (!value.equals(this.value.get())) {
+            throw new IllegalArgumentException("contradiction");
+        }
     }
 
-    private void informAboutNewValue() {
+    private void informAboutNewValue(Object informant) {
         for (Constraint<E> constraint : constraints) {
-            constraint.informAboutNewValue(this);
+            if (informant != constraint) {
+                constraint.informAboutNewValue(this);
+            }
         }
     }
 
