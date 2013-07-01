@@ -83,7 +83,7 @@ public class ProblemRunner {
         stdOutput.println(output);
         stdOutput.println();
 
-        String actual = out.toString();
+        String actual = capturedOutput();
         stdOutput.println("Actual:");
         stdOutput.println(actual);
 
@@ -93,7 +93,15 @@ public class ProblemRunner {
         Assert.assertArrayEquals(output.split("\\s+"), actual.split("\\s+"));
     }
 
-    public String getOutput() {
+    public String capturedOutput() {
         return out.toString();
+    }
+
+    public String getOutput() {
+        return capturedOutput();
+    }
+
+    public PrintWriter outputStream() {
+        return printWriter();
     }
 }
