@@ -6,15 +6,15 @@ public class Solver extends Problem {
 
     @Override
     public void run() {
-        Graph graph = readInput();
-        new Greedy().solve(graph, out);
+        Graph2 graph = readInput();
+        new Greedy().solve(graph).outputTo(out);
     }
 
-    public Graph readInput() {
+    public Graph2 readInput() {
         int n = scanner.nextInt();
         int e = scanner.nextInt();
 
-        Graph graph = new Graph(n);
+        Graph2 graph = new Graph2(n);
         for (int i = 0; i < e; i++) {
             int u = scanner.nextInt();
             int v = scanner.nextInt();
