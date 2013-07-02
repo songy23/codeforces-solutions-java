@@ -1,9 +1,13 @@
 package optimization.coloring;
 
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import optimization.coloring.Graph.Vertex;
+import optimization.coloring.Graph2.Vertex;
 
 /**
  * Новиков - дискретная математика для программистов, последняя глава
@@ -13,13 +17,20 @@ import optimization.coloring.Graph.Vertex;
  */
 public class Greedy {
 
-    public void solve(Graph graph, PrintWriter out) {
+    public Result solve(Graph2 graph) {
+        int[] colors = colorsArray(graph.getN());
         List<Vertex> allVerticies = prepare(graph);
-        int color = color(allVerticies);
-        graph.outoutTo(color, false, out);
+        int solution = color(allVerticies, colors);
+        return new Result(solution, false, colors);
     }
 
-    private List<Vertex> prepare(Graph graph) {
+    private static int[] colorsArray(int n) {
+        int[] colors = new int[n];
+        Arrays.fill(colors, -1);
+        return colors;
+    }
+
+    private List<Vertex> prepare(Graph2 graph) {
         List<Vertex> allVerticies = graph.allVerticies();
 
         Collections.sort(allVerticies, new Comparator<Vertex>() {
@@ -32,7 +43,7 @@ public class Greedy {
         return new LinkedList<Vertex>(allVerticies);
     }
 
-    private int color(List<Vertex> allVerticies) {
+    private int color(List<Vertex> allVerticies, int[] colors) {
         int color = 0;
 
         while (!allVerticies.isEmpty()) {
@@ -43,13 +54,13 @@ public class Greedy {
 
                 boolean allGood = true;
                 for (Vertex to : current.adjacent) {
-                    if (to.color == color) {
+                    if (colors[to.number] == color) {
                         allGood = false;
                         break;
                     }
                 }
                 if (allGood) {
-                    current.color = color;
+                    colors[current.number] = color;
                     iterator.remove();
                 }
             }
