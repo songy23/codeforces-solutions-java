@@ -15,7 +15,7 @@ public class GreedyTest {
 
         Result result = new Greedy().solve(graph);
         assertTrue(result.getSolution() <= 97);
-
+        
         result.outputTo(test.outputStream());
         System.out.println(test.capturedOutput());
     }

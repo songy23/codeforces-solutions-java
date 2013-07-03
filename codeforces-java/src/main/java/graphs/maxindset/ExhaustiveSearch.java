@@ -3,7 +3,7 @@ package graphs.maxindset;
 import java.util.List;
 import java.util.Set;
 
-import org.testng.collections.Sets;
+import com.google.common.collect.Sets;
 
 public class ExhaustiveSearch {
 
@@ -14,11 +14,11 @@ public class ExhaustiveSearch {
             res.add(a);
             return res;
         }
-        Set<Set<Integer>> resu = Sets.newHashSet();
-//        List<Integer> allVertices = graph.allVertices();
 
-        int v = graph.randomVertex();
-//        for (int v : allVertices) {
+        Set<Set<Integer>> resu = Sets.newHashSet();
+        List<Integer> allVertices = graph.allVertices();
+
+        for (int v : allVertices) {
             // not taking the vertex
             Graph g1 = graph.removeVertex(v);
             Set<Set<Integer>> left = solve(g1);
@@ -33,7 +33,7 @@ public class ExhaustiveSearch {
                 set.add(v);
                 resu.add(set);
             }
-//        }
+        }
         return resu;
     }
 }
