@@ -1,15 +1,15 @@
 package optimization.coloring;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Graph {
+public class Graph2 {
     private int n;
     private final List<Vertex> vertices;
 
-    public Graph(int n) {
+    public Graph2(int n) {
         this.n = n;
         this.vertices = createAdjacencyList(n);
     }
@@ -41,39 +41,39 @@ public class Graph {
         return new ArrayList<Vertex>(vertices);
     }
 
-    public int[] colors() {
-        int[] colors = new int[n];
-        for (Vertex v : vertices) {
-            colors[v.number] = v.color;
-        }
-        return colors;
-    }
-
-    public void outoutTo(int optValue, boolean optimal, PrintWriter out) {
-        out.print(optValue);
-        out.print(' ');
-        out.print(optimal ? 1 : 0);
-        out.println();
-
-        int[] colors = colors();
-        for (int i = 0; i < n; i++) {
-            out.print(colors[i]);
-            out.print(' ');
-        }
-        out.flush();
-    }
-
     public static class Vertex {
-        int color = -1;
         final int number;
-        final List<Vertex> adjacent = new LinkedList<Vertex>();
+        final Collection<Vertex> adjacent;
 
-        public Vertex(int from) {
-            this.number = from;
+        public Vertex(int number) {
+            this(number, new LinkedList<Vertex>());
+        }
+
+        public Vertex(int number, Collection<Vertex> adjacent) {
+            this.number = number;
+            this.adjacent = adjacent;
         }
 
         public void addNodeTo(Vertex to) {
             adjacent.add(to);
+        }
+
+        @Override
+        public int hashCode() {
+            return number;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (obj instanceof Vertex) {
+                return ((Vertex) obj).number == number;
+            }
+
+            return false;
         }
     }
 

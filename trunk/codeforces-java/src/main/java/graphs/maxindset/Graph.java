@@ -33,10 +33,18 @@ public class Graph {
         return res;
     }
 
-    public Graph removeVertex(int v) {
+    public Graph removeVertex(Integer v) {
         checkVertex(v);
         Map<Integer, List<Integer>> copy = copyVertices();
         removeVertexInternal(v, copy);
+        return new Graph(copy);
+    }
+
+    public Graph removeVertices(Collection<Integer> nodes) {
+        Map<Integer, List<Integer>> copy = copyVertices();
+        for (Integer v : nodes) {
+            removeVertexInternal(v, copy);
+        }
         return new Graph(copy);
     }
 
@@ -56,7 +64,7 @@ public class Graph {
         return copy;
     }
 
-    public Graph removeVertexWithAdjacent(int v) {
+    public Graph removeVertexWithAdjacent(Integer v) {
         checkVertex(v);
         Map<Integer, List<Integer>> copy = copyVertices();
         List<Integer> adjacent = copy.get(v);
@@ -67,7 +75,7 @@ public class Graph {
         return new Graph(copy);
     }
 
-    public Graph removeAllAdjacentTo(int v) {
+    public Graph removeAllAdjacentTo(Integer v) {
         checkVertex(v);
         Map<Integer, List<Integer>> copy = copyVertices();
         List<Integer> adjacent = copy.get(v);
@@ -78,10 +86,9 @@ public class Graph {
     }
 
     public int randomVertex() {
-        // ArrayList<Integer> keys = Lists.newArrayList(vertices.keySet());
-        // int item = RANDOM.nextInt(keys.size());
-        // return keys.get(item);
-        return vertices.keySet().iterator().next();
+        List<Integer> keys = Lists.newArrayList(vertices.keySet());
+        int item = RANDOM.nextInt(keys.size());
+        return keys.get(item);
     }
 
     public List<Integer> allVertices() {
@@ -99,12 +106,16 @@ public class Graph {
         vertices.get(to).add(from);
     }
 
-    public Collection<Integer> adjacent(int i) {
+    public Collection<Integer> adjacent(Integer i) {
         checkVertex(i);
         return vertices.get(i);
     }
+    
+    public Graph copy() {
+        return new Graph(copyVertices());
+    }
 
-    private void checkVertex(int i) {
+    private void checkVertex(Integer i) {
         Validate.isTrue(vertices.containsKey(i));
     }
 

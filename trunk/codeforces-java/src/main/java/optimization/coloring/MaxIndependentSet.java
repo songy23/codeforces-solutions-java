@@ -1,65 +1,30 @@
 package optimization.coloring;
 
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
+import graphs.maxindset.Graph;
+import graphs.maxindset.RandomizedBBSearch;
+
 import java.util.Set;
-
-import optimization.coloring.Graph2.Vertex;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class MaxIndependentSet {
 
-    public void solve(Graph2 graph) {
+    public Result solve(Graph graph) {
 
-        Set<Vertex> all = Sets.newLinkedHashSet(graph.allVerticies());
+        int[] colors = new int[graph.size()];
+        int c = 0;
 
-        int[] colors = new int[all.size()];
+        Graph g = graph.copy();
 
-    }
-
-    public int solve1(Set<Vertex> all, int color, int[] colors) {
-        if (all.isEmpty()) {
-            return color;
-        }
-
-        Set<Vertex> s = selectMax(all);
-        for (Vertex v : s) {
-            colors[v.number] = color;
-        }
-
-        Set<Vertex> difference = difference(all, s);
-
-        return solve1(difference, color + 1, colors);
-    }
-
-    private Set<Vertex> difference(Set<Vertex> all, Set<Vertex> s) {
-        LinkedHashSet<Vertex> diff = Sets.newLinkedHashSet(all);
-
-        for (Vertex v : s) {
-            for (Vertex u : v.adjacent) {
-                Set<Vertex> ad = Sets.newLinkedHashSet(u.adjacent);
-                ad.remove(v);
-                Vertex nu = new Vertex(u.number, ad);
-                diff.add(nu);
+        while (g.size() != 0) {
+            Set<Integer> indSet = RandomizedBBSearch.solve(g);
+            for (int i : indSet) {
+                colors[i] = c;
             }
 
-            diff.remove(v);
+            g = g.removeVertices(indSet);
+            c++;
         }
 
-        return diff;
+        return new Result(c, false, colors);
     }
 
-    private Set<Vertex> selectMax(Set<Vertex> all) {
-        int k = 0;
-
-        List<Set<Vertex>> S = null;
-        List<Set<Vertex>> q_minus = null;
-        List<Set<Vertex>> q_plus = null;
-
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
