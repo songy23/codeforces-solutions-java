@@ -99,6 +99,10 @@ public class Graph {
         return vertices.size();
     }
 
+    public boolean notEmpty() {
+        return !vertices.isEmpty();
+    }
+
     public void addEdge(int from, int to) {
         checkVertex(from);
         checkVertex(to);
@@ -110,13 +114,28 @@ public class Graph {
         checkVertex(i);
         return vertices.get(i);
     }
-    
+
     public Graph copy() {
         return new Graph(copyVertices());
     }
 
     private void checkVertex(Integer i) {
         Validate.isTrue(vertices.containsKey(i));
+    }
+
+    public List<Integer> nodesOrderedByDegree() {
+        List<Integer> result = allVertices();
+
+        Collections.sort(result, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                List<Integer> first = vertices.get(o1);
+                List<Integer> second = vertices.get(o2);
+                return second.size() - first.size();
+            }
+        });
+
+        return result;
     }
 
 }
