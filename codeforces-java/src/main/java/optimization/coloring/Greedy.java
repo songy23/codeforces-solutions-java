@@ -1,26 +1,24 @@
 package optimization.coloring;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import graphs.maxindset.Graph;
 
-import optimization.coloring.Graph2.Vertex;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 
 /**
  * Новиков - дискретная математика для программистов, последняя глава
  * 
  * @author Grigorev Alexey
- * 
  */
 public class Greedy {
 
-    public Result solve(Graph2 graph) {
-        int[] colors = colorsArray(graph.getN());
-        List<Vertex> allVerticies = prepare(graph);
-        int solution = color(allVerticies, colors);
+    public Result solve(Graph graph) {
+        int[] colors = colorsArray(graph.size());
+        int solution = color(graph, colors);
         return new Result(solution, false, colors);
     }
 
@@ -30,41 +28,31 @@ public class Greedy {
         return colors;
     }
 
-    private List<Vertex> prepare(Graph2 graph) {
-        List<Vertex> allVerticies = graph.allVerticies();
-
-        Collections.sort(allVerticies, new Comparator<Vertex>() {
-            @Override
-            public int compare(Vertex o1, Vertex o2) {
-                return o2.adjacent.size() - o1.adjacent.size();
-            }
-        });
-
-        return new LinkedList<Vertex>(allVerticies);
-    }
-
-    private int color(List<Vertex> allVerticies, int[] colors) {
+    private int color(Graph graph, int[] colors) {
         int color = 0;
 
-        while (!allVerticies.isEmpty()) {
-            Iterator<Vertex> iterator = allVerticies.iterator();
+        Graph g = graph;
+        while (g.notEmpty()) {
+            Set<Integer> toRemove = Sets.newHashSet();
 
-            while (iterator.hasNext()) {
-                Vertex current = iterator.next();
+            List<Integer> nodes = g.nodesOrderedByDegree();
 
+            for (Integer from : nodes) {
                 boolean allGood = true;
-                for (Vertex to : current.adjacent) {
-                    if (colors[to.number] == color) {
+                Collection<Integer> adjacent = g.adjacent(from);
+                for (Integer to : adjacent) {
+                    if (colors[to] == color) {
                         allGood = false;
                         break;
                     }
                 }
                 if (allGood) {
-                    colors[current.number] = color;
-                    iterator.remove();
+                    colors[from] = color;
+                    toRemove.add(from);
                 }
             }
             color++;
+            g = g.removeVertices(toRemove);
         }
         return color;
     }

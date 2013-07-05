@@ -1,5 +1,7 @@
 package optimization.coloring;
 
+import graphs.maxindset.Graph;
+
 import org.testng.annotations.Test;
 
 import coursera.ProblemRunner;
@@ -8,13 +10,14 @@ import static org.testng.Assert.*;
 public class GreedyTest {
     @Test
     public void gc_250_9_greedy() {
-        Solver solver = new Solver();
+        GreedySolver solver = new GreedySolver();
         ProblemRunner test = new ProblemRunner(solver);
         test.inputFromFile("gc_250_9");
-        Graph2 graph = solver.readInput();
+        Graph graph = solver.readInput();
 
         Result result = new Greedy().solve(graph);
-        assertTrue(result.getSolution() <= 97);
+        assertTrue(result.checkAgainst(graph));
+        assertTrue(result.getSolution() <= 90);
         
         result.outputTo(test.outputStream());
         System.out.println(test.capturedOutput());

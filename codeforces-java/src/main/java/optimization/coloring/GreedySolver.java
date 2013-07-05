@@ -1,20 +1,21 @@
 package optimization.coloring;
 
+import graphs.maxindset.Graph;
 import notsandbox.Problem;
 
 public class GreedySolver extends Problem {
 
     @Override
     public void run() {
-        Graph2 graph = readInput();
+        Graph graph = readInput();
         new Greedy().solve(graph).outputTo(out);
     }
 
-    public Graph2 readInput() {
+    public Graph readInput() {
         int n = scanner.nextInt();
         int e = scanner.nextInt();
 
-        Graph2 graph = new Graph2(n);
+        Graph graph = new Graph(n);
         for (int i = 0; i < e; i++) {
             int u = scanner.nextInt();
             int v = scanner.nextInt();
