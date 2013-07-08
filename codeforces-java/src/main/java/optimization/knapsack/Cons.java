@@ -1,7 +1,10 @@
 package optimization.knapsack;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.ListIterator;
+
+import com.google.common.collect.Lists;
 
 public class Cons<E> {
     private final E head;
@@ -61,6 +64,16 @@ public class Cons<E> {
             return list2;
         }
         return cons(list1.head, append(list1.tail, list2));
+    }
+
+    public List<E> toList() {
+        Cons<E> it = this;
+        List<E> res = Lists.newLinkedList();
+        while (it != null) {
+            res.add(it.head);
+            it = it.tail;
+        }
+        return res;
     }
 
     @Override

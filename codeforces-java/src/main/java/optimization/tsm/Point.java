@@ -34,4 +34,23 @@ public class Point {
         return number;
     }
 
+    @Override
+    public String toString() {
+        return "(" + number + "; " + x + ", " + y + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Point) {
+            Point that = (Point) obj;
+            return this.number == that.number;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return number;
+    }
+
 }

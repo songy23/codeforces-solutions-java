@@ -1,22 +1,22 @@
 package optimization.coloring;
 
 import notsandbox.Problem;
-import graphs.maxindset.Graph;
+import graphs.UndirectedGraph;
 
 public class IndSetSolver extends Problem {
 
     @Override
     public void run() {
-        Graph graph = readInput();
+        UndirectedGraph graph = readInput();
         MaxIndependentSet mis = new MaxIndependentSet();
         mis.solve(graph).outputTo(out);
     }
 
-    public Graph readInput() {
+    public UndirectedGraph readInput() {
         int n = scanner.nextInt();
         int e = scanner.nextInt();
 
-        Graph graph = new Graph(n);
+        UndirectedGraph graph = new UndirectedGraph(n);
         for (int i = 0; i < e; i++) {
             int u = scanner.nextInt();
             int v = scanner.nextInt();

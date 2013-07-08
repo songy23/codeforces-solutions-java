@@ -1,6 +1,6 @@
 package optimization.coloring;
 
-import graphs.maxindset.Graph;
+import graphs.UndirectedGraph;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -38,7 +38,7 @@ public class Result {
         out.flush();
     }
 
-    public boolean checkAgainst(Graph graph) {
+    public boolean checkAgainst(UndirectedGraph graph) {
         List<Integer> allVertices = graph.allVertices();
 
         for (int v : allVertices) {

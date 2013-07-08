@@ -1,6 +1,7 @@
 package optimization.coloring;
 
-import graphs.maxindset.Graph;
+import graphs.UndirectedGraph;
+
 import org.testng.annotations.Test;
 
 import coursera.ProblemRunner;
@@ -12,7 +13,7 @@ public class IndSetSolverTest {
         IndSetSolver solver = new IndSetSolver();
         ProblemRunner test = new ProblemRunner(solver);
         test.inputFromFile("gc_250_9");
-        Graph graph = solver.readInput();
+        UndirectedGraph graph = solver.readInput();
 
         MaxIndependentSet s = new MaxIndependentSet();
         Result solve = s.solve(graph);

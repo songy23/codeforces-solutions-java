@@ -12,11 +12,11 @@ public class Result {
 
     public Result(List<Point> path, boolean optimal) {
         this.path = path;
-        this.distance = calc(path);
+        this.distance = calcTotalDistance(path);
         this.optimal = optimal;
     }
 
-    private static double calc(List<Point> path) {
+    public static double calcTotalDistance(List<Point> path) {
         if (path.isEmpty()) {
             return 0.0;
         }
@@ -24,6 +24,7 @@ public class Result {
         double res = 0.0;
         Iterator<Point> it = path.iterator();
         Point prev = it.next();
+        Point first = prev;
 
         while (it.hasNext()) {
             Point next = it.next();
@@ -31,6 +32,7 @@ public class Result {
             prev = next;
         }
 
+        res = res + prev.distanceTo(first);
         return res;
     }
 

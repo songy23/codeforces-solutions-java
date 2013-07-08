@@ -1,6 +1,6 @@
 package optimization.coloring;
 
-import graphs.maxindset.Graph;
+import graphs.UndirectedGraph;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +16,7 @@ import com.google.common.collect.Sets;
  */
 public class Greedy {
 
-    public Result solve(Graph graph) {
+    public Result solve(UndirectedGraph graph) {
         int[] colors = colorsArray(graph.size());
         int solution = color(graph, colors);
         return new Result(solution, false, colors);
@@ -28,10 +28,10 @@ public class Greedy {
         return colors;
     }
 
-    private int color(Graph graph, int[] colors) {
+    private int color(UndirectedGraph graph, int[] colors) {
         int color = 0;
 
-        Graph g = graph;
+        UndirectedGraph g = graph;
         while (g.notEmpty()) {
             Set<Integer> toRemove = Sets.newHashSet();
 

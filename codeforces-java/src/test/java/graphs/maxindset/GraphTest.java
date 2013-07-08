@@ -1,5 +1,7 @@
 package graphs.maxindset;
 
+import graphs.UndirectedGraph;
+
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -8,14 +10,14 @@ public class GraphTest {
 
     @Test
     public void removeVertex() {
-        Graph graph = new Graph(5);
+        UndirectedGraph graph = new UndirectedGraph(5);
         graph.addEdge(4, 0);
         graph.addEdge(4, 1);
         graph.addEdge(4, 2);
         graph.addEdge(4, 3);
         assertEquals(graph.size(), 5);
 
-        Graph newGraph = graph.removeVertex(4);
+        UndirectedGraph newGraph = graph.removeVertex(4);
         assertEquals(newGraph.size(), 4);
         assertEquals(newGraph.adjacent(0).size(), 0);
         assertEquals(newGraph.adjacent(1).size(), 0);
@@ -25,7 +27,7 @@ public class GraphTest {
 
     @Test
     public void removeVertex2() {
-        Graph graph = new Graph(5);
+        UndirectedGraph graph = new UndirectedGraph(5);
         graph.addEdge(4, 0);
         graph.addEdge(4, 1);
         graph.addEdge(4, 2);
@@ -36,7 +38,7 @@ public class GraphTest {
         graph.addEdge(3, 0);
         assertEquals(graph.size(), 5);
 
-        Graph newGraph = graph.removeVertex(4);
+        UndirectedGraph newGraph = graph.removeVertex(4);
         assertEquals(newGraph.size(), 4);
         assertEquals(newGraph.adjacent(0).size(), 2);
         assertEquals(newGraph.adjacent(1).size(), 2);
@@ -46,7 +48,7 @@ public class GraphTest {
 
     @Test
     public void removeAdjacent() {
-        Graph graph = new Graph(5);
+        UndirectedGraph graph = new UndirectedGraph(5);
         graph.addEdge(4, 0);
         graph.addEdge(4, 1);
         graph.addEdge(4, 2);
@@ -57,7 +59,7 @@ public class GraphTest {
         graph.addEdge(3, 0);
         assertEquals(graph.size(), 5);
 
-        Graph newGraph = graph.removeAllAdjacentTo(4);
+        UndirectedGraph newGraph = graph.removeAllAdjacentTo(4);
         assertEquals(newGraph.size(), 1);
         assertEquals(newGraph.adjacent(4).size(), 0);
 
