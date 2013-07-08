@@ -1,18 +1,18 @@
 package optimization.coloring;
 
-import graphs.maxindset.Graph;
+import graphs.UndirectedGraph;
 import graphs.maxindset.RandomizedBBSearch;
 
 import java.util.Set;
 
 public class MaxIndependentSet {
 
-    public Result solve(Graph graph) {
+    public Result solve(UndirectedGraph graph) {
 
         int[] colors = new int[graph.size()];
         int c = 0;
 
-        Graph g = graph.copy();
+        UndirectedGraph g = graph.copy();
 
         while (g.size() != 0) {
             Set<Integer> indSet = RandomizedBBSearch.solve(g);

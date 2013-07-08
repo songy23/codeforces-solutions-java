@@ -1,5 +1,7 @@
 package graphs.maxindset;
 
+import graphs.UndirectedGraph;
+
 import java.util.Set;
 
 import org.testng.annotations.Test;
@@ -8,7 +10,7 @@ public class ExhaustiveSearchTest {
 
     @Test
     public void solve() {
-        Graph graph = new Graph(6);
+        UndirectedGraph graph = new UndirectedGraph(6);
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
         graph.addEdge(1, 5);
@@ -24,7 +26,7 @@ public class ExhaustiveSearchTest {
 
     @Test
     public void solve2() {
-        Graph graph = new Graph(9);
+        UndirectedGraph graph = new UndirectedGraph(9);
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);

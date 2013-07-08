@@ -1,5 +1,7 @@
 package graphs.maxindset;
 
+import graphs.UndirectedGraph;
+
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,11 +15,11 @@ public class RandomizedBBSearch {
     private RandomizedBBSearch() {
     }
 
-    public static Set<Integer> solve(Graph graph) {
+    public static Set<Integer> solve(UndirectedGraph graph) {
         return trySolve(graph, 5);
     }
 
-    private static Set<Integer> trySolve(Graph graph, int trials) {
+    private static Set<Integer> trySolve(UndirectedGraph graph, int trials) {
         int c = trials;
         Set<Integer> best = Collections.emptySet();
 
@@ -33,7 +35,7 @@ public class RandomizedBBSearch {
         return best;
     }
 
-    public Set<Integer> solveInner(Graph graph, Set<Integer> solution) {
+    public Set<Integer> solveInner(UndirectedGraph graph, Set<Integer> solution) {
         if (solution.size() <= max) {
             return Collections.emptySet();
         }
@@ -46,13 +48,13 @@ public class RandomizedBBSearch {
         int v = graph.randomVertex();
 
         // taking the vertex
-        Graph g2 = graph.removeVertexWithAdjacent(v);
+        UndirectedGraph g2 = graph.removeVertexWithAdjacent(v);
         Set<Integer> newSolution = Sets.newLinkedHashSet(solution);
         newSolution.add(v);
         Set<Integer> right = solveInner(g2, newSolution);
 
         // not taking the vertex
-        Graph g1 = graph.removeVertex(v);
+        UndirectedGraph g1 = graph.removeVertex(v);
         Set<Integer> left = solveInner(g1, solution);
 
         if (left.size() > right.size()) {

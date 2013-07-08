@@ -1,4 +1,4 @@
-package graphs.maxindset;
+package graphs;
 
 import java.util.*;
 
@@ -7,17 +7,17 @@ import org.apache.commons.lang3.Validate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class Graph {
+public class UndirectedGraph {
 
     private static final Random RANDOM = new Random();
 
     private final Map<Integer, List<Integer>> vertices;
 
-    public Graph(int n) {
+    public UndirectedGraph(int n) {
         this.vertices = createAdjacencyList(n);
     }
 
-    private Graph(Map<Integer, List<Integer>> vertices) {
+    private UndirectedGraph(Map<Integer, List<Integer>> vertices) {
         this.vertices = vertices;
     }
 
@@ -33,19 +33,19 @@ public class Graph {
         return res;
     }
 
-    public Graph removeVertex(Integer v) {
+    public UndirectedGraph removeVertex(Integer v) {
         checkVertex(v);
         Map<Integer, List<Integer>> copy = copyVertices();
         removeVertexInternal(v, copy);
-        return new Graph(copy);
+        return new UndirectedGraph(copy);
     }
 
-    public Graph removeVertices(Collection<Integer> nodes) {
+    public UndirectedGraph removeVertices(Collection<Integer> nodes) {
         Map<Integer, List<Integer>> copy = copyVertices();
         for (Integer v : nodes) {
             removeVertexInternal(v, copy);
         }
-        return new Graph(copy);
+        return new UndirectedGraph(copy);
     }
 
     private Map<Integer, List<Integer>> copyVertices() {
@@ -64,7 +64,7 @@ public class Graph {
         return copy;
     }
 
-    public Graph removeVertexWithAdjacent(Integer v) {
+    public UndirectedGraph removeVertexWithAdjacent(Integer v) {
         checkVertex(v);
         Map<Integer, List<Integer>> copy = copyVertices();
         List<Integer> adjacent = copy.get(v);
@@ -72,17 +72,17 @@ public class Graph {
             removeVertexInternal(u, copy);
         }
         copy.remove(v);
-        return new Graph(copy);
+        return new UndirectedGraph(copy);
     }
 
-    public Graph removeAllAdjacentTo(Integer v) {
+    public UndirectedGraph removeAllAdjacentTo(Integer v) {
         checkVertex(v);
         Map<Integer, List<Integer>> copy = copyVertices();
         List<Integer> adjacent = copy.get(v);
         for (Integer u : adjacent) {
             removeVertexInternal(u, copy);
         }
-        return new Graph(copy);
+        return new UndirectedGraph(copy);
     }
 
     public int randomVertex() {
@@ -115,8 +115,8 @@ public class Graph {
         return vertices.get(i);
     }
 
-    public Graph copy() {
-        return new Graph(copyVertices());
+    public UndirectedGraph copy() {
+        return new UndirectedGraph(copyVertices());
     }
 
     private void checkVertex(Integer i) {
