@@ -8,10 +8,11 @@ import org.apache.commons.lang3.Validate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class Greedy {
+public class Greedy implements TspSolver {
 
     private static final double INFTY = 1.0 / 0.0;
 
+    @Override
     public Result solve(List<Point> input) {
         List<Point> path = Lists.newLinkedList();
         Set<Point> toVisit = Sets.newLinkedHashSet(input);

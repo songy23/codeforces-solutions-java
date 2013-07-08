@@ -18,11 +18,21 @@ public class SolverTest {
     }
 
     @Test
+    public void greedy1Runner() {
+        Solver solver = new Solver("greedy");
+        ProblemRunner test = new ProblemRunner(solver);
+        test.inputFromFile("tsp_2103_1");
+
+        String output = test.getOutput();
+        System.out.println(output);
+    }
+
+    @Test
     public void greedy2Runner() {
         Solver solver = new Solver("greedy2");
         ProblemRunner test = new ProblemRunner(solver);
         test.inputFromFile("tsp_51_1");
-        test.run();
+        solver.visualize();
 
         String output = test.getOutput();
         System.out.println(output);

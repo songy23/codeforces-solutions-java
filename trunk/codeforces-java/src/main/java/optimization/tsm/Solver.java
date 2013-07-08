@@ -2,34 +2,41 @@ package optimization.tsm;
 
 import java.util.List;
 
+import notsandbox.Problem;
 import optimization.tsm.mst.MST;
 
 import com.google.common.collect.Lists;
 
-import notsandbox.Problem;
-
 public class Solver extends Problem {
 
-    private final String algo;
+    private final TspSolver algo;
 
     public Solver(String algorithm) {
-        this.algo = algorithm;
+        this.algo = find(algorithm);
+    }
+
+    private static TspSolver find(String algo) {
+        if ("greedy".equals(algo)) {
+            return new Greedy();
+        } else if ("greedy2".equals(algo)) {
+            return new Greedy2();
+        } else if ("mst".equals(algo)) {
+            return new MST();
+        } else {
+            throw new IllegalArgumentException("not valid algorithm argument");
+        }
     }
 
     @Override
     public void run() {
         List<Point> points = readData();
-        Result result = null;
-        if ("greedy".equals(algo)) {
-            result = new Greedy().solve(points);
-        } else if ("greedy2".equals(algo)) {
-            result = new Greedy2().solve(points);
-        } else if ("mst".equals(algo)) {
-            result = new MST().solve(points);
-        } else {
-            throw new IllegalArgumentException("not valid algorithm argument");
-        }
-        result.outputTo(out);
+        algo.solve(points).outputTo(out);
+    }
+
+    public void visualize() {
+        List<Point> points = readData();
+        Result result = algo.solve(points);
+        new Drawer().visualize(points, result);
     }
 
     public List<Point> readData() {

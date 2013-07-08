@@ -8,11 +8,13 @@ import java.util.PriorityQueue;
 
 import optimization.tsm.Point;
 import optimization.tsm.Result;
+import optimization.tsm.TspSolver;
 
 import com.google.common.collect.Lists;
 
-public class MST {
+public class MST implements TspSolver {
 
+    @Override
     public Result solve(List<Point> input) {
         List<Edge> edges = kruskal(input);
         SpanningTree tree = buildTree(input.size(), edges);

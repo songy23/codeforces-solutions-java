@@ -9,9 +9,10 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Sets;
 
-public class Greedy2 {
+public class Greedy2 implements TspSolver {
     private static final double INFTY = 1.0 / 0.0;
 
+    @Override
     public Result solve(List<Point> input) {
         Set<Point> toVisit = Sets.newLinkedHashSet(input);
 
