@@ -19,10 +19,23 @@ public class Drawer {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 600;
     private static final String VERTEX_STYLE = "defaultVertex;strokeColor=black;fillColor=white;rounded=true";
-    
-    public void visualize(List<Point> input, Result result) {
-        mxGraph graph = new mxGraph();
+    private static final String FIRST_STYLE = "defaultVertex;strokeColor=black;fillColor=red;rounded=true";
 
+    private final List<Point> input;
+    private final Result result;
+    private final String filename;
+    private double maxX = -1;
+    private double maxY = -1;
+    private Map<String, mxCell> nodes = Maps.newHashMap();
+
+    public Drawer(List<Point> input, Result result, String filename) {
+        this.input = input;
+        this.result = result;
+        this.filename = filename;
+        findMaxes();
+    }
+
+    private void findMaxes() {
         double maxX = -1;
         double maxY = -1;
 
@@ -35,15 +48,24 @@ public class Drawer {
             }
         }
 
+        this.maxX = maxX;
+        this.maxY = maxY;
+    }
+
+    public void visualize() {
+        mxGraph graph = prepareGrraph();
+        exportSvg(graph, filename);
+    }
+
+    private mxGraph prepareGrraph() {
+        mxGraph graph = new mxGraph();
+
         graph.getModel().beginUpdate();
         Object defaultParent = graph.getDefaultParent();
 
-        Map<String, mxCell> nodes = Maps.newHashMap();
-
         for (Point p : input) {
             String id = id(p);
-            mxCell v = (mxCell) graph.insertVertex(defaultParent, id, id, p.getX() * WIDTH / maxX, p.getY() * HEIGHT / maxY, 20,
-                    20, VERTEX_STYLE);
+            mxCell v = (mxCell) graph.insertVertex(defaultParent, id, id, xPos(p), yPos(p), 20, 20, VERTEX_STYLE);
             nodes.put(id, v);
         }
 
@@ -54,17 +76,27 @@ public class Drawer {
 
         while (iterator.hasNext()) {
             Point next = iterator.next();
-            graph.insertEdge(defaultParent, null, null, nodes.get(id(prev)), nodes.get(id(next)));
+            graph.insertEdge(defaultParent, null, null, node(prev), node(next));
             prev = next;
         }
 
-        graph.insertEdge(defaultParent, null, null, nodes.get(id(prev)), nodes.get(id(first)));
+        graph.insertEdge(defaultParent, null, null, node(prev), node(first));
 
-        nodes.get(id(first)).setStyle("defaultVertex;strokeColor=black;fillColor=red;rounded=true");
+        node(first).setStyle(FIRST_STYLE);
         graph.getModel().endUpdate();
+        return graph;
+    }
 
-        exportSvg(graph, ".\\graph.svg");
+    private mxCell node(Point prev) {
+        return nodes.get(id(prev));
+    }
 
+    private double yPos(Point p) {
+        return p.getY() * HEIGHT / maxY;
+    }
+
+    private double xPos(Point p) {
+        return p.getX() * WIDTH / maxX;
     }
 
     private void exportSvg(mxGraph graph, String filename) {
