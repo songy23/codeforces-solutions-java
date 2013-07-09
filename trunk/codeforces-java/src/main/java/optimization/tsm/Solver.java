@@ -30,13 +30,15 @@ public class Solver extends Problem {
     @Override
     public void run() {
         List<Point> points = readData();
-        algo.solve(points).outputTo(out);
+        Result result = algo.solve(points);
+        result.outputTo(out);
     }
 
-    public void visualize() {
+    public void solveAndVisualize(String filename) {
         List<Point> points = readData();
         Result result = algo.solve(points);
-        new Drawer().visualize(points, result);
+        result.outputTo(out);
+        new Drawer(points, result, filename).visualize();
     }
 
     public List<Point> readData() {

@@ -1,6 +1,7 @@
 package optimization.tsm;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import optimization.knapsack.Cons;
@@ -11,6 +12,7 @@ import com.google.common.collect.Sets;
 
 public class Greedy2 implements TspSolver {
     private static final double INFTY = 1.0 / 0.0;
+    private static final Random RANDOM = new Random();
 
     @Override
     public Result solve(List<Point> input) {
@@ -26,7 +28,7 @@ public class Greedy2 implements TspSolver {
             toVisit.remove(best);
         }
 
-        return new Result(path.toList(), false);
+        return new Result(path.reverse().toList(), false);
     }
 
     private Point findBest(Cons<Point> path, Set<Point> toVisit) {
