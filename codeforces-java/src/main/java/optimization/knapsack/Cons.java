@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import optimization.tsm.Point;
+
 import com.google.common.collect.Lists;
 
 public class Cons<E> {
@@ -31,7 +33,12 @@ public class Cons<E> {
     }
 
     public static <E> Cons<E> from(E... items) {
-        return from(Arrays.asList(items).listIterator(items.length));
+        return from(Arrays.asList(items));
+    }
+
+    public static <E> Cons<E> from(List<E> items) {
+        ListIterator<E> listIterator = items.listIterator(items.size());
+        return from(listIterator);
     }
 
     private static <E> Cons<E> from(ListIterator<E> items) {
@@ -87,6 +94,19 @@ public class Cons<E> {
         }
 
         return head.toString() + joiner + tail.join(joiner);
+    }
+
+    public Cons<E> filter(E e) {
+        Cons<E> reverse = this.reverse();
+        Cons<E> result = null;
+        while (reverse != null) {
+            E head = reverse.head;
+            if (!head.equals(e)) {
+                result = cons(head, result);
+            }
+            reverse = reverse.tail;
+        }
+        return result;
     }
 
 }

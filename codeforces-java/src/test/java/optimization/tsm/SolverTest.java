@@ -32,7 +32,8 @@ public class SolverTest {
         Solver solver = new Solver("greedy2");
         ProblemRunner test = new ProblemRunner(solver);
         test.inputFromFile("tsp_51_1");
-        solver.solveAndVisualize("tsp_51_1.svg");
+        Result result = solver.solve();
+        result.visualize("tsp_51_1.svg");
         String output = test.getOutput();
         System.out.println(output);
     }

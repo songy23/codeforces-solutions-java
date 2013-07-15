@@ -28,7 +28,7 @@ public class Greedy implements TspSolver {
             cur = closest;
         }
 
-        return new Result(path, false);
+        return new Result(input, path, false);
     }
 
     private Point findClosed(Point cur, Set<Point> toVisit) {

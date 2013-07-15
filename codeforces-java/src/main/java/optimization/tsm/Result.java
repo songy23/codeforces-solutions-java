@@ -6,11 +6,13 @@ import java.util.List;
 
 public class Result {
 
+    private final List<Point> input;
     private final List<Point> path;
     private final double distance;
     private final boolean optimal;
 
-    public Result(List<Point> path, boolean optimal) {
+    public Result(List<Point> input, List<Point> path, boolean optimal) {
+        this.input = input;
         this.path = path;
         this.distance = calcTotalDistance(path);
         this.optimal = optimal;
@@ -47,6 +49,21 @@ public class Result {
             out.print(' ');
         }
         out.flush();
+    }
+
+    public void visualize(String filename) {
+        new Drawer(input, this, filename).visualize();
+    }
+
+    public void check() {
+        boolean[] visited = new boolean[input.size()];
+        for (Point p : path) {
+            int number = p.getNumber();
+            if (visited[number]) {
+                throw new IllegalStateException("not valid path");
+            }
+            visited[number] = true;
+        }
     }
 
     public double getDistance() {
