@@ -23,7 +23,7 @@ public class MST implements TspSolver {
 
         List<Point> path = toPath(input, eulerTraversal);
 
-        return new Result(path, false);
+        return new Result(input, path, false);
     }
 
     public List<Edge> kruskal(List<Point> input) {

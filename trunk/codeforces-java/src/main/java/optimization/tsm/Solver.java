@@ -22,6 +22,8 @@ public class Solver extends Problem {
             return new Greedy2();
         } else if ("mst".equals(algo)) {
             return new MST();
+        } else if ("b&b".equals(algo)) {
+            return new BaB();
         } else {
             throw new IllegalArgumentException("not valid algorithm argument");
         }
@@ -29,16 +31,14 @@ public class Solver extends Problem {
 
     @Override
     public void run() {
-        List<Point> points = readData();
-        Result result = algo.solve(points);
-        result.outputTo(out);
+        solve();
     }
 
-    public void solveAndVisualize(String filename) {
+    public Result solve() {
         List<Point> points = readData();
         Result result = algo.solve(points);
         result.outputTo(out);
-        new Drawer(points, result, filename).visualize();
+        return result;
     }
 
     public List<Point> readData() {

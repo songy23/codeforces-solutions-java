@@ -28,7 +28,7 @@ public class Greedy2 implements TspSolver {
             toVisit.remove(best);
         }
 
-        return new Result(path.reverse().toList(), false);
+        return new Result(input, path.reverse().toList(), false);
     }
 
     private Point findBest(Cons<Point> path, Set<Point> toVisit) {
