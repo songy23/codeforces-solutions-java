@@ -1,10 +1,10 @@
 package optimization.tsm;
 
+import general.list.Cons;
+
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
-import optimization.knapsack.Cons;
 
 import org.apache.commons.lang3.Validate;
 
@@ -12,7 +12,6 @@ import com.google.common.collect.Sets;
 
 public class Greedy2 implements TspSolver {
     private static final double INFTY = 1.0 / 0.0;
-    private static final Random RANDOM = new Random();
 
     @Override
     public Result solve(List<Point> input) {

@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
+
 public class Result {
 
     private final List<Point> input;
@@ -56,12 +58,11 @@ public class Result {
     }
 
     public void check() {
+        Validate.isTrue(input.size() == path.size());
         boolean[] visited = new boolean[input.size()];
         for (Point p : path) {
             int number = p.getNumber();
-            if (visited[number]) {
-                throw new IllegalStateException("not valid path");
-            }
+            Validate.isTrue(!visited[number]);
             visited[number] = true;
         }
     }

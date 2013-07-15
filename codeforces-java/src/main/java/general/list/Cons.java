@@ -1,10 +1,10 @@
-package optimization.knapsack;
+package general.list;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import optimization.tsm.Point;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.google.common.collect.Lists;
 
@@ -109,4 +109,21 @@ public class Cons<E> {
         return result;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Cons) {
+            @SuppressWarnings("unchecked")
+            Cons<E> that = (Cons<E>) obj;
+            return this.head.equals(that.head) && ObjectUtils.equals(this.tail, that.tail);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return toList().hashCode();
+    }
 }

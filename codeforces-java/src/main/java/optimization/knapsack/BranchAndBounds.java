@@ -1,5 +1,7 @@
 package optimization.knapsack;
 
+import general.list.Cons;
+
 import java.util.Arrays;
 import java.util.Comparator;
 

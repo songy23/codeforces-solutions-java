@@ -1,5 +1,6 @@
 package optimization.knapsack;
 
+import general.list.Cons;
 import optimization.knapsack.Knapsack.Item;
 import optimization.knapsack.Knapsack.KnapsackResult;
 
