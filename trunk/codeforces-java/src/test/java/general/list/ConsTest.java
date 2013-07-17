@@ -40,4 +40,10 @@ public class ConsTest {
         Cons<Integer> reverse = Cons.from(1, 2, 3, 4).reverse();
         assertEquals(reverse, Cons.from(4, 3, 2, 1));
     }
+
+    @Test
+    public void filter() {
+        Cons<Integer> result = Cons.from(1, 2, 3, 4).filter(2).filter(3);
+        assertEquals(result, Cons.from(1, 4));
+    }
 }

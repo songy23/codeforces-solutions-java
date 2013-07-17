@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Lists;
 
@@ -17,10 +18,7 @@ public class Cons<E> {
     }
 
     public Cons(E head, Cons<E> tail) {
-        if (head == null) {
-            throw new NullPointerException();
-        }
-        this.head = head;
+        this.head = Validate.notNull(head);;
         this.tail = tail;
     }
 
