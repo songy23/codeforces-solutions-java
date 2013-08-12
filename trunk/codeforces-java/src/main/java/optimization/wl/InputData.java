@@ -1,8 +1,10 @@
 package optimization.wl;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.Validate;
 import org.testng.internal.annotations.Sets;
 
 public class InputData {
@@ -56,6 +58,10 @@ public class InputData {
             return totalCost;
         }
 
+        public boolean hasCapacityLeft() {
+            return capacity > 0;
+        }
+
         public int getCapacity() {
             return capacity;
         }
@@ -89,6 +95,10 @@ public class InputData {
             return demand;
         }
 
+        public double getCost(Warehouse warehouse) {
+            return cost[warehouse.getNumber()];
+        }
+
         public double getCost(int warehouse) {
             return cost[warehouse];
         }
@@ -110,5 +120,25 @@ public class InputData {
             return false;
         }
 
+        public Warehouse findCheapest(Set<Warehouse> warehouses) {
+            Validate.notEmpty(warehouses);
+
+            Iterator<Warehouse> iterator = warehouses.iterator();
+            Warehouse best = iterator.next();
+            double bestPrice = cost[best.getNumber()];
+
+            while (iterator.hasNext()) {
+
+                Warehouse next = iterator.next();
+                double price = cost[next.getNumber()];
+
+                if (price < bestPrice) {
+                    bestPrice = price;
+                    best = next;
+                }
+            }
+
+            return best;
+        }
     }
 }

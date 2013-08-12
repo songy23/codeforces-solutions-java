@@ -10,6 +10,16 @@ import optimization.wl.InputData.Warehouse;
 
 import org.apache.commons.lang3.Validate;
 
+/**
+ * For each customer c,
+ * 
+ * <ul>
+ * <li>find the cheapest warehouse w* that can satisfy the demand</li>
+ * <li>assign c to w*</li>
+ * </ul>
+ * 
+ * @author Grigorev Alexey
+ */
 public class GreedySolver implements WlSolver {
 
     @Override
@@ -40,9 +50,7 @@ public class GreedySolver implements WlSolver {
 
     private static Queue<Warehouse> pq(int m, List<Warehouse> warehouses, Customer customer) {
         Queue<Warehouse> q = new PriorityQueue<Warehouse>(m, new GreedyWarehouseComparator(customer));
-        for (Warehouse warehouse : warehouses) {
-            q.add(warehouse);
-        }
+        q.addAll(warehouses);
         return q;
     }
 

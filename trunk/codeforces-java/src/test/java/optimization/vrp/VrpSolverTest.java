@@ -1,19 +1,19 @@
-package optimization.tsm;
+package optimization.vrp;
 
 import org.testng.annotations.Test;
 
 import coursera.ProblemRunner;
 
-public class BaBTest {
+public class VrpSolverTest {
 
     @Test
-    public void solve() {
-        Solver solver = new Solver("bb");
+    public void solveNaiveGreedy() {
+        Solver solver = new Solver("naivegreedy");
         ProblemRunner test = new ProblemRunner(solver);
-        test.inputFromFile("tsp_51_1");
+        test.inputFromFile("vrp_16_3_1");
         Result result = solver.solve();
-        result.check();
-        result.visualize("tsp_51_1.svg");
+
+        result.visualizeTo("vrp_16_3_1.svg");
 
         String output = test.getOutput();
         System.out.println(output);

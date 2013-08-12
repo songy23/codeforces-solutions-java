@@ -11,17 +11,30 @@ import notsandbox.Problem;
 
 public class Solver extends Problem {
 
-    private final WlSolver algo = new GreedySolver();
+    private final WlSolver algo;
 
     public Solver(String algo) {
-        // TODO Auto-generated constructor stub
+        if ("greedy".equals(algo)) {
+            this.algo = new GreedySolver();
+        } else if ("greedy2".equals(algo)) {
+            this.algo = new GreedySolver2();
+        } else if ("greedyuncapacitated".equals(algo)) {
+            this.algo = new GreedyUncapacitatedSolver();
+        } else {
+            throw new IllegalArgumentException("unknown algo " + algo);
+        }
     }
 
     @Override
     public void run() {
+        solve();
+    }
+
+    public Result solve() {
         InputData input = readData();
         Result result = algo.solve(input);
         result.outputTo(out);
+        return result;
     }
 
     public InputData readData() {

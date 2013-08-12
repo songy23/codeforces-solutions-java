@@ -37,10 +37,10 @@ public class Problem1 extends Problem {
         int rightUnsorted[] = Arrays.copyOfRange(input, middle, n);
 
         Pair<int[], Long> left = countAndSort(leftUnsorted);
-        Pair<int[], Long> rigth = countAndSort(rightUnsorted);
-        Pair<int[], Long> split = countSplitAndMerge(left.getLeft(), rigth.getLeft());
+        Pair<int[], Long> right = countAndSort(rightUnsorted);
+        Pair<int[], Long> split = countSplitAndMerge(left.getLeft(), right.getLeft());
 
-        return Pair.of(split.getLeft(), left.getRight() + rigth.getRight() + split.getRight());
+        return Pair.of(split.getLeft(), left.getRight() + right.getRight() + split.getRight());
     }
 
     public Pair<int[], Long> countSplitAndMerge(int[] left, int[] right) {

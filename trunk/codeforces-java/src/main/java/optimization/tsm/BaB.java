@@ -17,6 +17,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
 
+/**
+ * Greedy randomized branch-and-bounds approach
+ * 
+ * @author Grigorev Alexey
+ */
 public class BaB implements TspSolver {
 
     private static final Random RANDOM = new Random();
@@ -24,6 +29,7 @@ public class BaB implements TspSolver {
     private double optCost;
     private PartialResult best;
     private int totalSize;
+    private long totalLimit = 0;
 
     @Override
     public Result solve(List<Point> input) {
@@ -35,15 +41,18 @@ public class BaB implements TspSolver {
         Result greedyResult = new Greedy().solve(random);
         double greedyDistance = greedyResult.getDistance();
 
-        Cons<Point> all = Cons.from(random);
-        Point first = all.head();
-
-        Cons<Point> head = Cons.cons(first, null);
-        PartialResult partial = new PartialResult(head);
         best = null;
         optCost = greedyDistance;
 
-        commi(all.tail(), partial);
+        Cons<Point> all = Cons.from(random);
+        for (Point start : random) {
+            double coeff = 2.0;
+            totalLimit = (long) (totalSize * totalSize * totalSize * coeff);
+
+            Cons<Point> head = Cons.cons(start, null);
+            PartialResult partial = new PartialResult(head);
+            tsp(all.filter(start), partial);
+        }
 
         if (best == null) {
             return greedyResult;
@@ -52,7 +61,12 @@ public class BaB implements TspSolver {
         }
     }
 
-    public void commi(Cons<Point> notUsed, PartialResult partial) {
+    public void tsp(Cons<Point> notUsed, PartialResult partial) {
+        totalLimit--;
+        if (totalLimit < 0) {
+            return;
+        }
+
         Queue<Point> queue = priorityByDistance(partial, notUsed);
         int limit = 2;
 
@@ -72,7 +86,7 @@ public class BaB implements TspSolver {
                         return;
                     }
                 } else {
-                    commi(notUsed.filter(p), nextBest);
+                    tsp(notUsed.filter(p), nextBest);
                 }
             } else {
                 return;
@@ -173,7 +187,7 @@ public class BaB implements TspSolver {
 
         public Result toFull(List<Point> input) {
             List<Point> path = last.reverse().toList();
-            return new Result(input, path, true);
+            return new Result(input, path, false);
         }
 
     }
