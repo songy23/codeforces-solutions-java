@@ -26,6 +26,10 @@ public class Result {
         return res;
     }
 
+    public void checkFeasibility() {
+        //  
+    }
+
     public void outputTo(PrintWriter out) {
         out.print(objective);
         out.print(' ');

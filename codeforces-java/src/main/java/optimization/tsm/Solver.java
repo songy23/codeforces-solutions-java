@@ -1,6 +1,7 @@
 package optimization.tsm;
 
 import java.util.List;
+import java.util.UUID;
 
 import notsandbox.Problem;
 import optimization.tsm.mst.MST;
@@ -22,7 +23,7 @@ public class Solver extends Problem {
             return new Greedy2();
         } else if ("mst".equals(algo)) {
             return new MST();
-        } else if ("b&b".equals(algo)) {
+        } else if ("bb".equals(algo)) {
             return new BaB();
         } else {
             throw new IllegalArgumentException("not valid algorithm argument");
@@ -31,7 +32,8 @@ public class Solver extends Problem {
 
     @Override
     public void run() {
-        solve();
+        Result result = solve();
+        result.visualize(algo + " " + UUID.randomUUID().toString().substring(0, 10) + ".svg");
     }
 
     public Result solve() {
