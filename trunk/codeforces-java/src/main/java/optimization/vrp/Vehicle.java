@@ -1,8 +1,10 @@
 package optimization.vrp;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import optimization.vrp.ClarkeWrightSolver.LocationPair;
 import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Lists;
@@ -14,11 +16,12 @@ public class Vehicle {
     private final List<Location> locations = Lists.newLinkedList();
 
     private int capacity;
+    private int usedCapacity = 0;
 
     public Vehicle(int index, int capacity, Location warehouse) {
         this.index = index;
-        this.capacity = capacity;
         this.warehouse = warehouse;
+        this.capacity = capacity;
     }
 
     public boolean canSatisfy(Location location) {
@@ -27,8 +30,10 @@ public class Vehicle {
 
     public void addLocation(Location location) {
         Validate.isTrue(canSatisfy(location), "can't satisfy the demand of location %d", location.getIndex());
-        capacity = capacity - location.getDemand();
+        location.assignTo(this);
         locations.add(location);
+        capacity = capacity - location.getDemand();
+        usedCapacity = usedCapacity + location.getDemand();
     }
 
     public double calcCost() {
@@ -53,13 +58,70 @@ public class Vehicle {
         return cost;
     }
 
-    public boolean isFull() {
-        return capacity == 0;
+    public boolean canMergeWith(Vehicle other) {
+        if (other.equals(this)) {
+            return false;
+        }
+
+        return other.usedCapacity < this.capacity;
     }
 
-    @Override
-    public String toString() {
-        return "Vehicle [" + index + ", c=" + capacity + "; " + locations + "]";
+    public boolean mergeWith(Vehicle other, LocationPair mergingEdge) {
+        Location firstLocation = mergingEdge.getFirstLocation();
+        boolean isFirstAtTheBeginning = this.isFirst(firstLocation);
+        boolean isFirstAtTheEnd = this.isLast(firstLocation);
+
+        Location secondLocation = mergingEdge.getSecondLocation();
+        boolean isSecondAtTheBeginning = other.isFirst(secondLocation);
+        boolean isSecondAtTheEnd = other.isLast(secondLocation);
+
+        if (isFirstAtTheEnd && isSecondAtTheBeginning) {
+            return addOthers(other);
+        }
+
+        if (isFirstAtTheEnd && isSecondAtTheEnd) {
+            other.reverseLocations();
+            return addOthers(other);
+        }
+
+        if (isFirstAtTheBeginning && isSecondAtTheBeginning) {
+            this.reverseLocations();
+            return addOthers(other);
+        }
+
+        if (isFirstAtTheBeginning && isSecondAtTheEnd) {
+            this.reverseLocations();
+            other.reverseLocations();
+            return addOthers(other);
+        }
+
+        return false;
+    }
+
+    private boolean addOthers(Vehicle other) {
+        for (Location location : other.locations) {
+            this.addLocation(location);
+        }
+        other.clear();
+        return true;
+    }
+
+    private void reverseLocations() {
+        Collections.reverse(locations);
+    }
+
+    private void clear() {
+        capacity = capacity + usedCapacity;
+        usedCapacity = 0;
+        locations.clear();
+    }
+
+    private boolean isFirst(Location location) {
+        return locations.get(0).equals(location);
+    }
+
+    private boolean isLast(Location location) {
+        return locations.get(locations.size() - 1).equals(location);
     }
 
     public List<Location> getLocations() {
@@ -74,7 +136,38 @@ public class Vehicle {
         return locations;
     }
 
+    public boolean isUsed() {
+        return !locations.isEmpty();
+    }
+
     public int getIndex() {
         return index;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof Vehicle) {
+            Vehicle that = (Vehicle) obj;
+            return this.index == that.index;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return index;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicle [" + index + ", c=" + capacity + "; " + locations + "]";
+    }
+
+
+
 }

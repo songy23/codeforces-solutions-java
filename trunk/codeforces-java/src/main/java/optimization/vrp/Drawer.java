@@ -41,11 +41,11 @@ public class Drawer {
     }
 
     public void visualize() {
-        mxGraph graph = prepareGrraph();
+        mxGraph graph = prepareGraph();
         exportSvg(graph, filename);
     }
 
-    private mxGraph prepareGrraph() {
+    private mxGraph prepareGraph() {
         mxGraph graph = new mxGraph();
 
         graph.getModel().beginUpdate();

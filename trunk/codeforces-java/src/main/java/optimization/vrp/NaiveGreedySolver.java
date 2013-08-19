@@ -41,6 +41,7 @@ public class NaiveGreedySolver implements VrpSolver {
             vehicles.add(vehicle);
         }
 
+        // sometimes it won't validate!
         Validate.isTrue(locations.isEmpty());
 
         return new Result(input, vehicles, false);
