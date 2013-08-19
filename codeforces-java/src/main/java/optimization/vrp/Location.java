@@ -1,10 +1,13 @@
 package optimization.vrp;
 
 public class Location {
+
     private final int index;
     private final int demand;
     private final double x;
     private final double y;
+
+    private Vehicle vehicle;
 
     public Location(int index, int demand, double x, double y) {
         this.index = index;
@@ -37,6 +40,18 @@ public class Location {
 
     public int getDemand() {
         return demand;
+    }
+
+    public void assignTo(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public boolean hasAssignedVehicle() {
+        return vehicle != null;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
     @Override

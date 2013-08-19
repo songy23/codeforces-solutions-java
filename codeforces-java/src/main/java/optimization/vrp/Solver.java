@@ -13,8 +13,10 @@ public class Solver extends Problem {
     public Solver(String algo) {
         if ("naivegreedy".equals(algo)) {
             this.algo = new NaiveGreedySolver();
-        } else if ("greedy2".equals(algo)) {
-            //
+        } else if ("randomizedgreedy".equals(algo)) {
+            this.algo = new RandomizedGreedySolver();
+        } else if ("cw".equals(algo)) {
+            this.algo = new ClarkeWrightSolver();
         } else {
             throw new IllegalArgumentException("unknown algo " + algo);
         }

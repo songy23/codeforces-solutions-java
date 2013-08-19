@@ -3,6 +3,8 @@ package optimization.vrp;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
+
 public class Result {
 
     private final InputData input;
@@ -29,14 +31,33 @@ public class Result {
             }
             out.print('\n');
         }
+
+        out.flush();
     }
 
     public double calcCost() {
-        return 0.0;
+        double cost = 0.0;
+        for (Vehicle vehicle : vehicles) {
+            cost = cost + vehicle.calcCost();
+        }
+        return cost;
     }
 
     public void visualizeTo(String filename) {
         new Drawer(input, this, filename).visualize();
+    }
+
+    public void checkFeasibility() {
+        int numberOfVehicles = input.getNumberOfVehicles();
+        Validate.isTrue(vehicles.size() == numberOfVehicles, "vehicle list size %d != number of vehicles %d", vehicles.size(),
+                numberOfVehicles);
+
+        List<Location> locations = input.getLocations();
+        for (Location location : locations) {
+            Validate.isTrue(location.hasAssignedVehicle());
+            Validate.isTrue(vehicles.contains(location.getVehicle()), "location's vehicle %d is not in the solution list", location
+                    .getVehicle().getIndex());
+        }
     }
 
     public List<Vehicle> getVehicles() {
