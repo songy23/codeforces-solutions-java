@@ -57,6 +57,7 @@ public class Heap<E, K> {
 
     /**
      * Retrieves the stored value from the front, removes the front from the heap
+     * 
      * @return the value stored in the front
      */
     public E pop() {
@@ -65,21 +66,31 @@ public class Heap<E, K> {
 
     /**
      * Retrieves the node from the front, removes the front from the queue
+     * 
      * @return the front (first) node
      */
     public HeapNode<E, K> extractFirst() {
         ensureNotEmpty();
 
+        HeapNode<E, K> first = heap.get(0);
+        remove(first);
+
+        return first;
+    }
+
+    public void remove(HeapNode<E, K> node) {
+        if (node.orphan) {
+            return;
+        }
+
         int lastIndex = heap.size() - 1;
         HeapNode<E, K> last = heap.get(lastIndex);
-        HeapNode<E, K> first = heap.get(0);
 
-        swap(first, last);
+        swap(node, last);
         heap.remove(lastIndex);
 
         increaseKey(last, last.getKey());
-
-        return first;
+        node.orphan = true;
     }
 
     private void ensureNotEmpty() {
@@ -99,7 +110,23 @@ public class Heap<E, K> {
     }
 
     /**
+     * Depending on the new value of key, it either calls {@link #decreaseKey(HeapNode, Object)} or
+     * {@link #increaseKey(HeapNode, Object)}
+     * 
+     * @param node
+     * @param newKey
+     */
+    public void updateKey(HeapNode<E, K> node, K newKey) {
+        if (lessThen(node.key, newKey)) {
+            increaseKey(node, newKey);
+        } else {
+            decreaseKey(node, newKey);
+        }
+    }
+
+    /**
      * Changes the value of the given key, keeping the heap balanced
+     * 
      * @param node to increase the key
      * @param newKey new key value
      */
@@ -142,6 +169,7 @@ public class Heap<E, K> {
 
     /**
      * Adds a new value to the heap, keeping it balanced
+     * 
      * @param value new value
      * @param key associated key
      * @return node where newly added value is stored
@@ -155,6 +183,7 @@ public class Heap<E, K> {
 
     /**
      * Changes the value of the given key, keeping the heap balanced
+     * 
      * @param node to decrease the key
      * @param newKey new key value
      */
@@ -232,6 +261,7 @@ public class Heap<E, K> {
         private final E value;
         private K key;
         private int index;
+        private boolean orphan = false;
 
         private HeapNode(E value, K key, int index) {
             this.value = value;
